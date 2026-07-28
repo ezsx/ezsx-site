@@ -5,16 +5,19 @@ export const workItemOrder = [
   "vpn",
   "rag-app",
   "repo-semantic-mcp",
+  "pixel-battle",
 ] as const;
 
 export type WorkItemId = (typeof workItemOrder)[number];
 
-export const workStoryHrefs = {
+export const workStoryHrefs: Readonly<
+  Partial<Record<WorkItemId, `#${string}`>>
+> = {
   seedforge: "#seedforge-core",
   vpn: "#vpn-control-plane",
   "rag-app": "#rag-evidence-system",
   "repo-semantic-mcp": "#repo-semantic-context",
-} as const satisfies Record<WorkItemId, `#${string}`>;
+};
 
 export type WorkItem<Id extends WorkItemId = WorkItemId> = Readonly<{
   id: Id;
@@ -141,6 +144,21 @@ export const siteContent = {
             "Code-aware repository retrieval for coding agents: dense + sparse search, weighted RRF, bounded graph expansion, and freshness diagnostics.",
           details: ["Python", "Qdrant", "MCP", "retrieval"],
         },
+        {
+          id: "pixel-battle",
+          name: "PixelBattle",
+          type: "public repository · 2024",
+          repositoryHref: "https://github.com/ezsx/PixelBattle",
+          description:
+            "Backend for a real-time collaborative canvas at a live event, with broadcast updates and action rate limiting; load-tested at 1.5-2K concurrent connections with broadcast latency below 50 ms.",
+          details: [
+            "FastAPI",
+            "WebSocket",
+            "PostgreSQL",
+            "Prometheus",
+            "Flutter",
+          ],
+        },
       ],
     },
     systems: {
@@ -242,6 +260,21 @@ export const siteContent = {
           description:
             "Поиск по репозиторию для coding agents: dense + sparse retrieval, взвешенный RRF, ограниченное расширение графа и диагностика актуальности индекса.",
           details: ["Python", "Qdrant", "MCP", "retrieval"],
+        },
+        {
+          id: "pixel-battle",
+          name: "PixelBattle",
+          type: "публичный репозиторий · 2024",
+          repositoryHref: "https://github.com/ezsx/PixelBattle",
+          description:
+            "Backend совместного холста в реальном времени для live-эвента с широковещательными обновлениями и ограничением частоты действий; нагрузочно протестирован на 1,5-2 тыс. одновременных подключений с задержкой рассылки ниже 50 мс.",
+          details: [
+            "FastAPI",
+            "WebSocket",
+            "PostgreSQL",
+            "Prometheus",
+            "Flutter",
+          ],
         },
       ],
     },

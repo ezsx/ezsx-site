@@ -25,7 +25,9 @@
   .rag-vector-store > div > i::after,
   .rag-agent-core > i::before,
   .rag-recall-bars i::after,
-  .rag-retrieval-pipeline > div.is-colbert > i b {
+  .rag-retrieval-pipeline > div.is-colbert > i b,
+  .repo-graph-bus b,
+  .repo-graph-node.is-seed > i {
     animation: none;
   }
 

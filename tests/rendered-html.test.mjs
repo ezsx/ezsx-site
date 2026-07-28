@@ -53,6 +53,11 @@ function assertSharedPortfolio(html) {
   assert.match(html, /repo-semantic-mcp/);
   assert.match(html, /rag_app/);
   assert.match(html, /seedforge/);
+  assert.match(html, /PixelBattle/);
+  assert.match(
+    html,
+    /https:\/\/github\.com\/ezsx\/PixelBattle/,
+  );
   assert.match(
     html,
     /https:\/\/github\.com\/ezsx\/NoitaSeedSearcherCUDA/,
@@ -66,6 +71,12 @@ function assertSharedPortfolio(html) {
         html.indexOf(`href="${projectTargets[index]}"`),
     );
   }
+  assert.ok(
+    html.indexOf('href="#repo-semantic-context"') <
+      html.indexOf(
+        'href="https://github.com/ezsx/PixelBattle"',
+      ),
+  );
   assert.match(html, /aria-controls="seedforge-system-story"/);
   assert.match(html, /aria-controls="vpn-system-story"/);
   assert.match(html, /aria-controls="rag-system-story"/);
@@ -74,6 +85,8 @@ function assertSharedPortfolio(html) {
   assert.match(html, /id="vpn-control-plane"/);
   assert.match(html, /id="rag-evidence-system"/);
   assert.match(html, /id="repo-semantic-context"/);
+  assert.doesNotMatch(html, /id="pixel-battle[^"]*"/);
+  assert.doesNotMatch(html, /aria-controls="pixel-battle/);
   assert.match(html, /22 \/ 22/);
   assert.match(html, /135\.2k/);
   assert.match(html, /433 \/ 433/);
@@ -106,7 +119,6 @@ function assertSharedPortfolio(html) {
   assert.doesNotMatch(html, /20\.9k/);
   assert.doesNotMatch(html, /POST \/config/);
   assert.doesNotMatch(html, /[\u2013\u2014]/);
-  assert.doesNotMatch(html, /PixelBattle/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 }
 
@@ -146,6 +158,7 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /two-level ranking path/,
         /retrieval substrate, not a hidden planner/,
         /May 7 dogfood snapshot/,
+        /Backend for a real-time collaborative canvas at a live event/,
       ],
       absent: [
         /Перейти к содержимому/,
@@ -155,6 +168,7 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /Отвечать по Telegram-корпусу с проверяемыми источниками/,
         /Найти нужные файлы до первой правки/,
         /Посмотреть путь одного repository-context запроса/,
+        /Backend совместного холста в реальном времени для live-эвента/,
       ],
     },
     {
@@ -190,6 +204,7 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /двухуровневое ранжирование/,
         /retrieval substrate, а не скрытый planner/,
         /dogfood snapshot · 7 мая/,
+        /Backend совместного холста в реальном времени для live-эвента/,
       ],
       absent: [
         /Skip to content/,
@@ -200,6 +215,7 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /Answer questions over Telegram with evidence you can inspect/,
         /Find the files that matter before the first edit/,
         /Inspect one repository-context request/,
+        /Backend for a real-time collaborative canvas at a live event/,
       ],
     },
   ];

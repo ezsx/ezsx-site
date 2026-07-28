@@ -21,6 +21,7 @@ export default function WorkOverview({ content }: { content: SiteContent }) {
       <div className="work-list">
         {content.work.items.map((item, index) => {
           const itemNumber = (index + 1).toString().padStart(2, "0");
+          const storyHref = workStoryHrefs[item.id];
 
           return (
             <article className="work-item" key={item.id}>
@@ -30,12 +31,16 @@ export default function WorkOverview({ content }: { content: SiteContent }) {
 
               <div className="work-name">
                 <h3>
-                  <a href={workStoryHrefs[item.id]}>
-                    {item.name}
-                    <span aria-hidden="true" className="work-jump-mark">
-                      ↓
-                    </span>
-                  </a>
+                  {storyHref ? (
+                    <a href={storyHref}>
+                      {item.name}
+                      <span aria-hidden="true" className="work-jump-mark">
+                        ↓
+                      </span>
+                    </a>
+                  ) : (
+                    item.name
+                  )}
                 </h3>
                 <span>{item.type}</span>
               </div>

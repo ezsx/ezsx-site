@@ -35,6 +35,59 @@
   }
 }
 
+@container repo-connect (max-width: 620px) {
+  .repo-graph-canvas {
+    aspect-ratio: auto;
+    min-height: 0;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .repo-graph-column {
+    display: contents;
+  }
+
+  .repo-graph-bus {
+    display: none;
+  }
+
+  .repo-graph-node {
+    width: auto;
+    min-height: 56px;
+  }
+
+  .repo-graph-node.is-seed {
+    grid-row: 1;
+    grid-column: 1 / -1;
+  }
+
+  .repo-graph-node.is-doc {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .repo-graph-node.is-test {
+    grid-row: 2;
+    grid-column: 2;
+  }
+
+  .repo-graph-node.is-watcher {
+    grid-row: 3;
+    grid-column: 1;
+  }
+
+  .repo-graph-node.is-indexer {
+    grid-row: 3;
+    grid-column: 2;
+  }
+
+  .repo-graph-node.is-config {
+    grid-row: 4;
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 600px) {
   .repo-semantic-story {
     margin-top: 112px;
@@ -204,31 +257,6 @@
   .repo-connect-scene > header strong,
   .repo-handoff-scene > header strong {
     text-align: left;
-  }
-
-  .repo-graph-canvas {
-    display: grid;
-    aspect-ratio: auto;
-    min-height: 0;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    padding: 10px;
-  }
-
-  .repo-graph-node {
-    position: relative;
-    inset: auto !important;
-    width: auto !important;
-    min-height: 56px;
-  }
-
-  .repo-graph-node.is-seed {
-    grid-row: 1;
-    grid-column: 1 / -1;
-  }
-
-  .repo-graph-links {
-    display: none;
   }
 
   .repo-file-groups > div {

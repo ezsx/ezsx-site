@@ -415,37 +415,63 @@ function ConnectScene({ copy }: { copy: RepoSemanticSceneCopy }) {
       </header>
 
       <div className="repo-graph-canvas">
-        <div className="repo-graph-node is-doc">
-          <span>{copy.relations.docs}</span>
-          <strong>{copy.graphNodes.docs}</strong>
+        <div className="repo-graph-column is-left">
+          <div className="repo-graph-node is-doc">
+            <span>{copy.relations.docs}</span>
+            <strong>{copy.graphNodes.docs}</strong>
+          </div>
+          <div className="repo-graph-node is-test">
+            <span>{copy.relations.tests}</span>
+            <strong>{copy.graphNodes.tests}</strong>
+          </div>
         </div>
-        <div className="repo-graph-node is-test">
-          <span>{copy.relations.tests}</span>
-          <strong>{copy.graphNodes.tests}</strong>
+
+        <div aria-hidden="true" className="repo-graph-bus is-left">
+          <span>
+            <b />
+          </span>
+          <i className="is-top">
+            <b />
+          </i>
+          <i className="is-bottom">
+            <b />
+          </i>
         </div>
+
         <div className="repo-graph-node is-seed">
           <span>{copy.seed}</span>
           <strong>{copy.graphNodes.summary}</strong>
           <i aria-hidden="true" />
         </div>
-        <div className="repo-graph-node is-watcher">
-          <span>{copy.relations.imports}</span>
-          <strong>{copy.graphNodes.watcher}</strong>
+
+        <div aria-hidden="true" className="repo-graph-bus is-right">
+          <span>
+            <b />
+          </span>
+          <i className="is-top">
+            <b />
+          </i>
+          <i className="is-middle">
+            <b />
+          </i>
+          <i className="is-bottom">
+            <b />
+          </i>
         </div>
-        <div className="repo-graph-node is-indexer">
-          <span>{copy.relations.calls}</span>
-          <strong>{copy.graphNodes.indexer}</strong>
-        </div>
-        <div className="repo-graph-node is-config">
-          <span>{copy.relations.config}</span>
-          <strong>{copy.graphNodes.config}</strong>
-        </div>
-        <div aria-hidden="true" className="repo-graph-links">
-          {Array.from({ length: 6 }, (_, index) => (
-            <i className={`link-${index + 1}`} key={index}>
-              <b />
-            </i>
-          ))}
+
+        <div className="repo-graph-column is-right">
+          <div className="repo-graph-node is-watcher">
+            <span>{copy.relations.imports}</span>
+            <strong>{copy.graphNodes.watcher}</strong>
+          </div>
+          <div className="repo-graph-node is-indexer">
+            <span>{copy.relations.calls}</span>
+            <strong>{copy.graphNodes.indexer}</strong>
+          </div>
+          <div className="repo-graph-node is-config">
+            <span>{copy.relations.config}</span>
+            <strong>{copy.graphNodes.config}</strong>
+          </div>
         </div>
       </div>
 
