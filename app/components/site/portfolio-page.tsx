@@ -1,6 +1,7 @@
 import type { Locale } from "../../content/locales";
 import { siteContent } from "../../content/site";
 import RagStory from "../../projects/rag/rag-story";
+import RepoSemanticStory from "../../projects/repo-semantic/repo-semantic-story";
 import SeedforgeStory from "../../projects/seedforge/seedforge-story";
 import VpnStory from "../../projects/vpn/vpn-story";
 import ContactSection from "./contact-section";
@@ -29,6 +30,7 @@ export default function PortfolioPage({ locale }: { locale: Locale }) {
             <SeedforgeStory locale={locale} />
             <VpnStory locale={locale} />
             <RagStory locale={locale} />
+            <RepoSemanticStory locale={locale} />
           </section>
 
           <SystemsSection content={content} />

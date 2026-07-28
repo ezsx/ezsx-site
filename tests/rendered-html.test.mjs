@@ -49,9 +49,11 @@ function assertSharedPortfolio(html) {
   assert.match(html, /aria-controls="seedforge-system-story"/);
   assert.match(html, /aria-controls="vpn-system-story"/);
   assert.match(html, /aria-controls="rag-system-story"/);
+  assert.match(html, /aria-controls="repo-semantic-system-story"/);
   assert.match(html, /id="seedforge-core"/);
   assert.match(html, /id="vpn-control-plane"/);
   assert.match(html, /id="rag-evidence-system"/);
+  assert.match(html, /id="repo-semantic-context"/);
   assert.match(html, /22 \/ 22/);
   assert.match(html, /135\.2k/);
   assert.match(html, /433 \/ 433/);
@@ -71,6 +73,14 @@ function assertSharedPortfolio(html) {
   assert.match(html, /0\.886/);
   assert.match(html, /RRF · 3 : 1/);
   assert.match(html, /ColBERT · 128-d/);
+  assert.match(html, /RRF k = 60/);
+  assert.match(html, /19 \/ 24/);
+  assert.match(html, /class="repo-runtime-pool"/);
+  assert.match(html, /class="repo-signal-stack"/);
+  assert.match(
+    html,
+    /rg --fixed-strings --line-number start_watcher \./,
+  );
   assert.match(html, /scdcor@gmail\.com/);
   assert.match(html, /https:\/\/ezsx\.xx\.kg\/og\.png/);
   assert.doesNotMatch(html, /20\.9k/);
@@ -109,6 +119,11 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /Inspect one question through retrieval/,
         /four different jobs/,
         /120 reviewed questions/,
+        /Find the files that matter before the first edit/,
+        /Inspect one repository-context request/,
+        /two-level ranking path/,
+        /retrieval substrate, not a hidden planner/,
+        /May 7 dogfood snapshot/,
       ],
       absent: [
         /Перейти к содержимому/,
@@ -116,6 +131,8 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /От исходного CUDA-движка/,
         /Почему очередь живёт в PostgreSQL/,
         /От шумных Telegram-постов — к ответу, который можно проверить/,
+        /Найти нужные файлы до первой правки/,
+        /Посмотреть путь одного repository-context запроса/,
       ],
     },
     {
@@ -146,6 +163,11 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /Посмотреть, как один вопрос проходит retrieval/,
         /четыре разные задачи/,
         /120 проверенных вопросов/,
+        /Найти нужные файлы до первой правки/,
+        /Посмотреть путь одного repository-context запроса/,
+        /двухуровневое ранжирование/,
+        /retrieval substrate, а не скрытый planner/,
+        /dogfood snapshot · 7 мая/,
       ],
       absent: [
         /Skip to content/,
@@ -154,6 +176,8 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /From an upstream CUDA engine/,
         /Why the queue lives in PostgreSQL/,
         /From noisy Telegram posts to an answer you can inspect/,
+        /Find the files that matter before the first edit/,
+        /Inspect one repository-context request/,
       ],
     },
   ];
@@ -247,4 +271,17 @@ test("client bundles do not embed both locale dictionaries", async () => {
   );
   assert.doesNotMatch(source, /Inspect one question through retrieval/);
   assert.doesNotMatch(source, /Посмотреть, как один вопрос проходит retrieval/);
+  assert.doesNotMatch(
+    source,
+    /Find the files that matter before the first edit/,
+  );
+  assert.doesNotMatch(source, /Найти нужные файлы до первой правки/);
+  assert.doesNotMatch(
+    source,
+    /Inspect one repository-context request/,
+  );
+  assert.doesNotMatch(
+    source,
+    /Посмотреть путь одного repository-context запроса/,
+  );
 });
