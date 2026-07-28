@@ -1,0 +1,196 @@
+@media (max-width: 980px) {
+  .rag-story .story-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .rag-story .story-stage-copy {
+    max-width: 720px;
+  }
+
+  .rag-story .story-stage-visual {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .rag-technical-body {
+    grid-template-columns: 1fr;
+  }
+
+  .rag-trace-overview,
+  .rag-trace-evidence {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 760px) {
+  .rag-signal-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .rag-runtime-boundary {
+    border-top: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .rag-story {
+    margin-top: 112px;
+  }
+
+  .rag-ingest-flow,
+  .rag-retrieval-pipeline {
+    grid-template-columns: 1fr;
+  }
+
+  .rag-ingest-flow > .rag-flow-link,
+  .rag-retrieval-pipeline > .rag-flow-link {
+    width: 1px;
+    height: 18px;
+    margin: 0 auto;
+  }
+
+  .rag-ingest-flow > .rag-flow-link::after,
+  .rag-retrieval-pipeline > .rag-flow-link::after {
+    top: auto;
+    right: -2px;
+    bottom: 0;
+    border-top: 4px solid var(--accent);
+    border-right: 2.5px solid transparent;
+    border-bottom: 0;
+    border-left: 2.5px solid transparent;
+  }
+
+  .rag-ingest-flow > .rag-flow-link b,
+  .rag-retrieval-pipeline > .rag-flow-link b {
+    top: -6px;
+    left: -1px;
+    width: 3px;
+    height: 7px;
+    animation-name: rag-packet-vertical;
+  }
+
+  .rag-idempotent-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .rag-idempotent-rail > small {
+    grid-column: auto;
+  }
+
+  .rag-plan-grid,
+  .rag-recall-pair,
+  .rag-ground-scene,
+  .rag-answer-main {
+    grid-template-columns: 1fr;
+  }
+
+  .rag-agent-core {
+    min-height: 160px;
+  }
+
+  .rag-route-strip {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .rag-route-strip strong {
+    text-align: left;
+  }
+
+  .rag-recall-lane {
+    grid-template-columns: 1fr minmax(100px, 0.8fr);
+  }
+
+  .rag-candidate-pool {
+    grid-template-columns: 1fr;
+  }
+
+  .rag-candidate-pool strong {
+    text-align: left;
+  }
+
+  .rag-coverage-panel {
+    min-height: 260px;
+  }
+
+  .rag-compute-boundary {
+    grid-template-columns: 1fr;
+  }
+
+  .rag-compute-boundary > span {
+    margin-bottom: 2px;
+  }
+
+  .rag-signal-guide,
+  .rag-trace-overview,
+  .rag-funnel-map,
+  .rag-trace-evidence,
+  .rag-runtime-boundary {
+    padding: 25px 20px;
+  }
+
+  .rag-funnel-spine {
+    margin-right: 12px;
+    margin-left: 12px;
+  }
+
+  .rag-notes {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .rag-vector-store > div {
+    grid-template-columns: 1fr;
+  }
+
+  .rag-vector-store > div > i {
+    width: 100%;
+    grid-row: 3;
+    grid-column: 1;
+  }
+
+  .rag-recall-lane,
+  .rag-funnel-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .rag-evidence-heading,
+  .rag-evidence-table > div:not(.rag-evidence-heading) {
+    grid-template-columns: 25px minmax(64px, 1fr) 42px 58px;
+    gap: 5px;
+  }
+
+  .rag-evidence-heading > small {
+    font-size: 7px;
+  }
+
+  .rag-signal-grid,
+  .rag-trace-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .rag-signal-grid > div {
+    min-height: 118px;
+  }
+
+  .rag-diversity-rule {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .rag-diversity-rule strong {
+    text-align: left;
+  }
+
+  .rag-technical-table > div {
+    grid-template-columns: 24px minmax(72px, 1fr) 38px 45px;
+    gap: 5px;
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+}

@@ -48,8 +48,10 @@ function assertSharedPortfolio(html) {
   assert.match(html, /seedforge/);
   assert.match(html, /aria-controls="seedforge-system-story"/);
   assert.match(html, /aria-controls="vpn-system-story"/);
+  assert.match(html, /aria-controls="rag-system-story"/);
   assert.match(html, /id="seedforge-core"/);
   assert.match(html, /id="vpn-control-plane"/);
+  assert.match(html, /id="rag-evidence-system"/);
   assert.match(html, /22 \/ 22/);
   assert.match(html, /135\.2k/);
   assert.match(html, /433 \/ 433/);
@@ -65,6 +67,10 @@ function assertSharedPortfolio(html) {
   assert.match(html, /RabbitMQ/);
   assert.match(html, /Kafka/);
   assert.match(html, /POST \/v1\/connect-flow\/connect/);
+  assert.match(html, /99 \/ 105/);
+  assert.match(html, /0\.886/);
+  assert.match(html, /RRF · 3 : 1/);
+  assert.match(html, /ColBERT · 128-d/);
   assert.match(html, /scdcor@gmail\.com/);
   assert.match(html, /https:\/\/ezsx\.xx\.kg\/og\.png/);
   assert.doesNotMatch(html, /20\.9k/);
@@ -99,12 +105,17 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /healthy node fleet/,
         /Why the queue lives in PostgreSQL/,
         /Fleet cards are representative architecture/,
+        /From noisy Telegram posts to an answer you can inspect/,
+        /Inspect one question through retrieval/,
+        /four different jobs/,
+        /120 reviewed questions/,
       ],
       absent: [
         /Перейти к содержимому/,
         /свернуть историю/,
         /От исходного CUDA-движка/,
         /Почему очередь живёт в PostgreSQL/,
+        /От шумных Telegram-постов — к ответу, который можно проверить/,
       ],
     },
     {
@@ -131,6 +142,10 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /От одного запроса на подключение/,
         /Почему очередь живёт в PostgreSQL/,
         /Карточки парка показывают репрезентативную архитектуру/,
+        /От шумных Telegram-постов — к ответу, который можно проверить/,
+        /Посмотреть, как один вопрос проходит retrieval/,
+        /четыре разные задачи/,
+        /120 проверенных вопросов/,
       ],
       absent: [
         /Skip to content/,
@@ -138,6 +153,7 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /collapse story/,
         /From an upstream CUDA engine/,
         /Why the queue lives in PostgreSQL/,
+        /From noisy Telegram posts to an answer you can inspect/,
       ],
     },
   ];
@@ -221,4 +237,14 @@ test("client bundles do not embed both locale dictionaries", async () => {
   assert.doesNotMatch(source, /никаких задач до подтверждения личности/);
   assert.doesNotMatch(source, /Why the queue lives in PostgreSQL/);
   assert.doesNotMatch(source, /Почему очередь живёт в PostgreSQL/);
+  assert.doesNotMatch(
+    source,
+    /From noisy Telegram posts to an answer you can inspect/,
+  );
+  assert.doesNotMatch(
+    source,
+    /От шумных Telegram-постов — к ответу, который можно проверить/,
+  );
+  assert.doesNotMatch(source, /Inspect one question through retrieval/);
+  assert.doesNotMatch(source, /Посмотреть, как один вопрос проходит retrieval/);
 });

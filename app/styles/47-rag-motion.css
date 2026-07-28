@@ -1,0 +1,75 @@
+@keyframes rag-packet-horizontal {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  18% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(34px);
+  }
+}
+
+@keyframes rag-packet-vertical {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  18% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@keyframes rag-vector-write {
+  0%,
+  100% {
+    opacity: 0.48;
+    transform: scaleX(0.24);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes rag-agent-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rag-candidate-scan {
+  0%,
+  100% {
+    opacity: 0.34;
+    transform: scaleX(0.18);
+  }
+  48%,
+  62% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes rag-token-match {
+  0%,
+  100% {
+    background: transparent;
+  }
+  45%,
+  65% {
+    background: var(--accent);
+  }
+}
