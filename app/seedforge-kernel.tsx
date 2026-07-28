@@ -381,6 +381,7 @@ export default function SeedforgeKernel() {
   const [motion, setMotion] = useState<"unknown" | "full" | "reduce">("unknown");
   const [cudaPhase, setCudaPhase] =
     useState<CudaTracePhaseId>("dispatch");
+  const [cudaTracePlaying, setCudaTracePlaying] = useState(false);
   const storyRef = useRef<HTMLElement>(null);
   const hasAutoPlayed = useRef(false);
   const stage = storyStages[activeStage];
@@ -697,10 +698,60 @@ export default function SeedforgeKernel() {
                   <small>lg_throttle sample share</small>
                 </div>
               </div>
+
+              <aside
+                aria-label="SM residency and representative stage"
+                className="profile-sm-panel"
+              >
+                <div
+                  aria-hidden="true"
+                  className={`sm-grid ${cudaTracePlaying ? "is-playing" : ""}`}
+                  data-phase={cudaPhase}
+                >
+                  {Array.from({ length: 80 }, (_, index) => (
+                    <span
+                      className={
+                        (index + cudaPhaseIndex * 3) % 10 < 2
+                          ? "is-cohort"
+                          : undefined
+                      }
+                      key={index}
+                    >
+                      {Array.from({ length: 6 }, (_, slot) => (
+                        <i
+                          key={slot}
+                          style={{
+                            animationDelay: `${(index % 10) * 32 + slot * 75}ms`,
+                          }}
+                        />
+                      ))}
+                    </span>
+                  ))}
+                </div>
+                <div className="sm-caption">
+                  <span>
+                    80 SM × up to 6 resident blocks · P6 register limit
+                  </span>
+                  <span>representative cohort · not per-SM telemetry</span>
+                </div>
+
+                <div className="sm-phase-readout">
+                  <span>representative block stage</span>
+                  <strong>
+                    {cudaPhaseDetail.number} · {cudaPhaseDetail.axis}
+                  </strong>
+                  <small>
+                    {cudaPhaseDetail.status}. Every SM can execute every stage.
+                  </small>
+                </div>
+              </aside>
             </div>
           </div>
 
-          <CudaSearchTrace onPhaseChange={setCudaPhase} />
+          <CudaSearchTrace
+            onPhaseChange={setCudaPhase}
+            onPlaybackChange={setCudaTracePlaying}
+          />
 
           <div className="profile-conclusion">
             <div>

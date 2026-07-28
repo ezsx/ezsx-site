@@ -43,7 +43,11 @@ test("server-renders the ezsx index", async () => {
   assert.match(html, /P6 diagnostic snapshot/);
   assert.match(html, /3\.08 \/ 32/);
   assert.match(html, /One warp through the search/);
-  assert.match(html, /class="trace-workspace"/);
+  assert.match(html, /class="profile-sm-panel"/);
+  assert.ok(
+    html.indexOf('class="profile-sm-panel"') <
+      html.indexOf('class="cuda-trace'),
+  );
   assert.match(html, /pause trace/);
   assert.match(html, /optional precheck/);
   assert.match(html, /ALU \/ INT/);

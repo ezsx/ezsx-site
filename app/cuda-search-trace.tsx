@@ -420,10 +420,12 @@ function drawTrace(
 
 type CudaSearchTraceProps = {
   onPhaseChange: (phase: CudaTracePhaseId) => void;
+  onPlaybackChange: (playing: boolean) => void;
 };
 
 export default function CudaSearchTrace({
   onPhaseChange,
+  onPlaybackChange,
 }: CudaSearchTraceProps) {
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [run, setRun] = useState(0);
@@ -437,6 +439,10 @@ export default function CudaSearchTrace({
   const progressRef = useRef(0);
   const phase = CUDA_TRACE_PHASES[phaseIndex];
   const playing = inViewport && !reducedMotion && !paused && !complete;
+
+  useEffect(() => {
+    onPlaybackChange(playing);
+  }, [onPlaybackChange, playing]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -623,74 +629,25 @@ export default function CudaSearchTrace({
         </div>
       </div>
 
-      <div className="trace-workspace">
-        <div className="trace-main">
-          <ol className="trace-axis" aria-label="CUDA search stages">
-            {CUDA_TRACE_PHASES.map((item, index) => (
-              <li
-                className={index === phaseIndex ? "is-active" : undefined}
-                key={item.id}
-              >
-                <span>{item.number}</span>
-                <strong>{item.axis}</strong>
-                <small>{item.summary}</small>
-              </li>
-            ))}
-          </ol>
-
-          <div className="trace-canvas-host" ref={hostRef}>
-            <canvas
-              aria-label="Representative 32-lane CUDA warp trace: dispatch, optional precheck, Wang layout, bitmap path traversal and retry, spawn hooks, pixel-scene and object selection, incremental hit filtering, then a binary result returned to the host"
-              ref={canvasRef}
-              role="img"
-            />
-          </div>
-        </div>
-
-        <aside
-          aria-label="SM residency and representative stage"
-          className="trace-sm-panel"
-        >
-          <div
-            aria-hidden="true"
-            className={`sm-grid ${playing ? "is-playing" : ""}`}
-            data-phase={phase.id}
+      <ol className="trace-axis" aria-label="CUDA search stages">
+        {CUDA_TRACE_PHASES.map((item, index) => (
+          <li
+            className={index === phaseIndex ? "is-active" : undefined}
+            key={item.id}
           >
-            {Array.from({ length: 80 }, (_, index) => (
-              <span
-                className={
-                  (index + phaseIndex * 3) % 10 < 2
-                    ? "is-cohort"
-                    : undefined
-                }
-                key={index}
-              >
-                {Array.from({ length: 6 }, (_, slot) => (
-                  <i
-                    key={slot}
-                    style={{
-                      animationDelay: `${(index % 10) * 32 + slot * 75}ms`,
-                    }}
-                  />
-                ))}
-              </span>
-            ))}
-          </div>
-          <div className="sm-caption">
-            <span>80 SM × up to 6 resident blocks · P6 register limit</span>
-            <span>representative cohort · not per-SM telemetry</span>
-          </div>
+            <span>{item.number}</span>
+            <strong>{item.axis}</strong>
+            <small>{item.summary}</small>
+          </li>
+        ))}
+      </ol>
 
-          <div className="sm-phase-readout">
-            <span>representative block stage</span>
-            <strong>
-              {phase.number} · {phase.axis}
-            </strong>
-            <small>
-              {phase.status}. Every SM can execute every stage.
-            </small>
-          </div>
-        </aside>
+      <div className="trace-canvas-host" ref={hostRef}>
+        <canvas
+          aria-label="Representative 32-lane CUDA warp trace: dispatch, optional precheck, Wang layout, bitmap path traversal and retry, spawn hooks, pixel-scene and object selection, incremental hit filtering, then a binary result returned to the host"
+          ref={canvasRef}
+          role="img"
+        />
       </div>
 
       <div className="trace-bottom">
