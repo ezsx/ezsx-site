@@ -37,10 +37,13 @@ test("server-renders the ezsx index", async () => {
   assert.match(html, /rag_app/);
   assert.match(html, /seedforge/);
   assert.match(html, /reliable two-GPU research system/);
+  assert.match(html, /aria-controls="seedforge-system-story"/);
+  assert.match(html, /collapse story/);
   assert.match(html, /22 \/ 22/);
   assert.match(html, /135\.2k/);
   assert.match(html, /433 \/ 433/);
   assert.match(html, /P6 diagnostic snapshot/);
+  assert.match(html, /collapse profiler/);
   assert.match(html, /3\.08 \/ 32/);
   assert.match(html, /One warp through the search/);
   assert.match(html, /class="profile-sm-panel"/);

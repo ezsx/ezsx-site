@@ -377,6 +377,7 @@ function StageScene({ stage }: { stage: StageId }) {
 export default function SeedforgeKernel() {
   const [activeStage, setActiveStage] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [storyExpanded, setStoryExpanded] = useState(true);
   const [inView, setInView] = useState(false);
   const [motion, setMotion] = useState<"unknown" | "full" | "reduce">("unknown");
   const [cudaPhase, setCudaPhase] =
@@ -422,11 +423,18 @@ export default function SeedforgeKernel() {
   }, []);
 
   useEffect(() => {
-    if (motion !== "full" || !inView || hasAutoPlayed.current) return;
+    if (
+      motion !== "full" ||
+      !inView ||
+      !storyExpanded ||
+      hasAutoPlayed.current
+    ) {
+      return;
+    }
     hasAutoPlayed.current = true;
     setActiveStage(0);
     setPlaying(true);
-  }, [inView, motion]);
+  }, [inView, motion, storyExpanded]);
 
   useEffect(() => {
     if (!playing || !inView || motion !== "full") return;
@@ -460,6 +468,11 @@ export default function SeedforgeKernel() {
     setPlaying(true);
   };
 
+  const toggleStoryDisclosure = () => {
+    if (storyExpanded) setPlaying(false);
+    setStoryExpanded((current) => !current);
+  };
+
   return (
     <article
       className="seedforge-story"
@@ -491,85 +504,112 @@ export default function SeedforgeKernel() {
 
       <div className="seedforge-panel">
         <div className="story-toolbar">
-          <div className="story-status">
-            <span className="story-status-dot" aria-hidden="true" />
-            <span>
-              system story · {stage.number} / {storyStages.length.toString().padStart(2, "0")}
+          <button
+            aria-controls="seedforge-system-story"
+            aria-expanded={storyExpanded}
+            className="story-disclosure"
+            onClick={toggleStoryDisclosure}
+            type="button"
+          >
+            <span className="story-status">
+              <span className="story-status-dot" aria-hidden="true" />
+              <span>
+                system story · {stage.number} /{" "}
+                {storyStages.length.toString().padStart(2, "0")}
+              </span>
             </span>
-          </div>
-          <button className="story-control" onClick={controlStory} type="button">
-            {motion === "reduce"
-              ? "next stage"
-              : playing
-                ? "pause"
-                : activeStage === storyStages.length - 1
-                  ? "replay story"
-                  : "play story"}
+            <span className="disclosure-cue">
+              <span>{storyExpanded ? "collapse story" : "expand story"}</span>
+              <i aria-hidden="true" className="disclosure-mark">
+                {storyExpanded ? "−" : "+"}
+              </i>
+            </span>
           </button>
+          {storyExpanded ? (
+            <button
+              className="story-control"
+              onClick={controlStory}
+              type="button"
+            >
+              {motion === "reduce"
+                ? "next stage"
+                : playing
+                  ? "pause"
+                  : activeStage === storyStages.length - 1
+                    ? "replay story"
+                    : "play story"}
+            </button>
+          ) : null}
         </div>
 
-        <ol className="story-steps" aria-label="Seedforge system story">
-          {storyStages.map((item, index) => (
-            <li key={item.id}>
-              <button
-                aria-current={index === activeStage ? "step" : undefined}
-                className={index === activeStage ? "is-active" : undefined}
-                onClick={() => selectStage(index)}
-                type="button"
-              >
-                <span>{item.number}</span>
-                <strong>{item.tab}</strong>
-                <small>{item.result}</small>
-              </button>
-            </li>
-          ))}
-        </ol>
+        <div
+          className="system-story-body"
+          hidden={!storyExpanded}
+          id="seedforge-system-story"
+        >
+          <ol className="story-steps" aria-label="Seedforge system story">
+            {storyStages.map((item, index) => (
+              <li key={item.id}>
+                <button
+                  aria-current={index === activeStage ? "step" : undefined}
+                  className={index === activeStage ? "is-active" : undefined}
+                  onClick={() => selectStage(index)}
+                  type="button"
+                >
+                  <span>{item.number}</span>
+                  <strong>{item.tab}</strong>
+                  <small>{item.result}</small>
+                </button>
+              </li>
+            ))}
+          </ol>
 
-        <div className="story-stage" key={stage.id}>
-          <div className="story-stage-copy">
-            <span>{stage.number} · {stage.tab}</span>
-            <h4>{stage.title}</h4>
-            <p className="story-stage-summary">{stage.summary}</p>
-            <p className="story-stage-detail">{stage.detail}</p>
-            <ul aria-label={`${stage.title} technical anchors`}>
-              {stage.tags.map((tag) => (
-                <li key={tag}>{tag}</li>
-              ))}
-            </ul>
+          <div className="story-stage" key={stage.id}>
+            <div className="story-stage-copy">
+              <span>{stage.number} · {stage.tab}</span>
+              <h4>{stage.title}</h4>
+              <p className="story-stage-summary">{stage.summary}</p>
+              <p className="story-stage-detail">{stage.detail}</p>
+              <ul aria-label={`${stage.title} technical anchors`}>
+                {stage.tags.map((tag) => (
+                  <li key={tag}>{tag}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="story-stage-visual">
+              <StageScene stage={stage.id} />
+            </div>
           </div>
 
-          <div className="story-stage-visual">
-            <StageScene stage={stage.id} />
-          </div>
-        </div>
+          <dl className="seedforge-headlines">
+            <div>
+              <dt>audited world coverage</dt>
+              <dd>22 / 22</dd>
+              <span>target biomes</span>
+            </div>
+            <div>
+              <dt>native workers</dt>
+              <dd>2 GPUs</dd>
+              <span>V100 + RTX 5060 Ti</span>
+            </div>
+            <div>
+              <dt>measured capacity*</dt>
+              <dd>135.2k</dd>
+              <span>coalmine seed/s</span>
+            </div>
+            <div>
+              <dt>completed census</dt>
+              <dd>2.147B</dd>
+              <span>world seeds scanned</span>
+            </div>
+          </dl>
 
-        <dl className="seedforge-headlines">
-          <div>
-            <dt>audited world coverage</dt>
-            <dd>22 / 22</dd>
-            <span>target biomes</span>
+          <div className="orchestration-proof">
+            <span>dual-GPU orchestration proof</span>
+            <strong>ROI12 · 433 / 433 accepted cells</strong>
+            <small>0 missing · 0 invalid · resumable ledger</small>
           </div>
-          <div>
-            <dt>native workers</dt>
-            <dd>2 GPUs</dd>
-            <span>V100 + RTX 5060 Ti</span>
-          </div>
-          <div>
-            <dt>measured capacity*</dt>
-            <dd>135.2k</dd>
-            <span>coalmine seed/s</span>
-          </div>
-          <div>
-            <dt>completed census</dt>
-            <dd>2.147B</dd>
-            <span>world seeds scanned</span>
-          </div>
-        </dl>
-
-        <div className="orchestration-proof">
-          <span>dual-GPU orchestration proof</span>
-          <strong>ROI12 · 433 / 433 accepted cells</strong>
-          <small>0 missing · 0 invalid · resumable ledger</small>
         </div>
 
         <details className="cuda-profile" open>
@@ -578,8 +618,22 @@ export default function SeedforgeKernel() {
               <small>technical layer / profiler</small>
               <strong>Inspect the CUDA worker</strong>
             </span>
-            <span>
-              V100 · 80 SM · 960 × 64 · 3.08 / 32 lanes
+            <span className="cuda-summary-actions">
+              <span className="cuda-profile-meta">
+                V100 · 80 SM · 960 × 64 · 3.08 / 32 lanes
+              </span>
+              <span className="disclosure-cue">
+                <span className="disclosure-closed-label">
+                  expand profiler
+                </span>
+                <span className="disclosure-open-label">
+                  collapse profiler
+                </span>
+                <i
+                  aria-hidden="true"
+                  className="disclosure-mark cuda-disclosure-mark"
+                />
+              </span>
             </span>
           </summary>
 
