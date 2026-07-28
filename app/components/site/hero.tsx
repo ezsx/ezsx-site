@@ -13,14 +13,20 @@ export default function Hero({ content }: { content: SiteContent }) {
       </ul>
 
       <div className="route" aria-hidden="true">
-        <span className="route-line line-a" />
-        <span className="route-line line-b" />
-        <span className="route-line line-c" />
-        <span className="route-line line-d" />
-        <span className="route-node node-a" />
-        <span className="route-node node-b" />
-        <span className="route-node node-c" />
-        <span className="route-node node-d" />
+        <span className="route-grid" />
+        <span className="route-bus" />
+        <span className="route-branch" />
+        <span className="route-packet is-horizontal" />
+        <span className="route-packet is-vertical" />
+        {content.hero.focus.map((item, index) => (
+          <span
+            className={`route-node node-${index + 1}`}
+            key={item}
+          >
+            <i />
+            <b>{item}</b>
+          </span>
+        ))}
       </div>
     </section>
   );

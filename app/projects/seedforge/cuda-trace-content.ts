@@ -150,7 +150,7 @@ export const CUDA_TRACE_PHASES_RU: CudaTracePhase[] = [
     number: "08",
     axis: "бинарный результат",
     status: "возврат принятого payload",
-    summary: "сначала результат GPU; каноническое доказательство — на host",
+    summary: "сначала результат GPU; каноническое доказательство - на host",
     pipelines: ["alu", "lsu"],
   },
 ];
@@ -183,7 +183,7 @@ export const cudaTraceCopy = {
     evidence: "release evidence / host side",
     release: "binary payload → canonical bytes → CPU = V100 = RTX",
     caveat:
-      "Sequence, lane masks, SM cohort and duration are schematic—not stage-time or per-SM telemetry. Static prechecks are configuration dependent; the profiled default coalmine command bypassed them. The 3.08-lane and pipeline counters are P6 diagnostic context, while this trace follows the final P7 search shape.",
+      "Sequence, lane masks, SM cohort and duration are schematic - not stage-time or per-SM telemetry. Static prechecks are configuration dependent; the profiled default coalmine command bypassed them. The 3.08-lane and pipeline counters are P6 diagnostic context, while this trace follows the final P7 search shape.",
   },
   ru: {
     eyebrow: "трасса выполнения / схема финального P7",
@@ -203,7 +203,7 @@ export const cudaTraceCopy = {
     evidence: "доказательство релиза / host side",
     release: "бинарный payload → канонические байты → CPU = V100 = RTX",
     caveat:
-      "Последовательность, маски lane, группа SM и длительность показаны схематично — это не время стадий и не телеметрия отдельных SM. Статические предварительные проверки зависят от конфигурации; профилированная команда coalmine по умолчанию их обходила. Значение 3,08 lane и счётчики конвейеров относятся к диагностическому P6, а эта трасса повторяет форму финального поиска P7.",
+      "Последовательность, маски lane, группа SM и длительность показаны схематично - это не время стадий и не телеметрия отдельных SM. Статические предварительные проверки зависят от конфигурации; профилированная команда coalmine по умолчанию их обходила. Значение 3,08 lane и счётчики конвейеров относятся к диагностическому P6, а эта трасса повторяет форму финального поиска P7.",
   },
 } as const;
 

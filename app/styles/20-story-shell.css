@@ -1,8 +1,12 @@
+.project-story {
+  scroll-margin-top: 48px;
+}
+
 .project-story-intro {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
   gap: 72px;
-  align-items: end;
+  align-items: start;
   margin-bottom: 48px;
 }
 
@@ -50,7 +54,7 @@
   justify-content: space-between;
   gap: 24px;
   min-height: 66px;
-  padding: 10px 16px 10px 22px;
+  padding: 10px 22px;
   border-bottom: 1px solid var(--line);
   background: var(--background);
 }

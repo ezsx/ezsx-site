@@ -1,19 +1,26 @@
 import type { Locale } from "./locales";
 
 export const workItemOrder = [
-  "vpn",
-  "repo-semantic-mcp",
-  "rag-app",
   "seedforge",
+  "vpn",
+  "rag-app",
+  "repo-semantic-mcp",
 ] as const;
 
 export type WorkItemId = (typeof workItemOrder)[number];
+
+export const workStoryHrefs = {
+  seedforge: "#seedforge-core",
+  vpn: "#vpn-control-plane",
+  "rag-app": "#rag-evidence-system",
+  "repo-semantic-mcp": "#repo-semantic-context",
+} as const satisfies Record<WorkItemId, `#${string}`>;
 
 export type WorkItem<Id extends WorkItemId = WorkItemId> = Readonly<{
   id: Id;
   name: string;
   type: string;
-  href?: string;
+  repositoryHref?: string;
   description: string;
   details: readonly string[];
 }>;
@@ -51,6 +58,7 @@ export type SiteContent = Readonly<{
     title: string;
     countLabel: string;
     items: WorkItemSequence<typeof workItemOrder>;
+    repositoryLabel: string;
     technologiesLabel: string;
   }>;
   systems: Readonly<{
@@ -95,8 +103,18 @@ export const siteContent = {
     work: {
       title: "Selected work",
       countLabel: "systems",
+      repositoryLabel: "repository",
       technologiesLabel: "technologies",
       items: [
+        {
+          id: "seedforge",
+          name: "CUDA seed search",
+          type: "public repository",
+          repositoryHref: "https://github.com/ezsx/NoitaSeedSearcherCUDA",
+          description:
+            "GPU-assisted exhaustive seed search with correctness gates, resumable heterogeneous-GPU runs, and reproducible results.",
+          details: ["CUDA", "profiling", "verification", "GPU"],
+        },
         {
           id: "vpn",
           name: "Secure connectivity",
@@ -106,31 +124,22 @@ export const siteContent = {
           details: ["Python", "PostgreSQL", "Redis", "Linux"],
         },
         {
-          id: "repo-semantic-mcp",
-          name: "repo-semantic-mcp",
-          type: "public repository",
-          href: "https://github.com/ezsx/repo-semantic-mcp",
-          description:
-            "Code-aware repository retrieval for coding agents: dense + sparse search, weighted RRF, bounded graph expansion, and freshness diagnostics.",
-          details: ["Python", "Qdrant", "MCP", "retrieval"],
-        },
-        {
           id: "rag-app",
           name: "rag_app",
           type: "public repository",
-          href: "https://github.com/ezsx/rag_app",
+          repositoryHref: "https://github.com/ezsx/rag_app",
           description:
             "Self-hosted RAG and ReAct with hybrid retrieval, citations, local inference, and an independent evaluation pipeline.",
           details: ["Python", "Qdrant", "LLM", "evaluation"],
         },
         {
-          id: "seedforge",
-          name: "seedforge",
+          id: "repo-semantic-mcp",
+          name: "repo-semantic-mcp",
           type: "public repository",
-          href: "https://github.com/ezsx/seedforge",
+          repositoryHref: "https://github.com/ezsx/repo-semantic-mcp",
           description:
-            "GPU-assisted exhaustive seed search with correctness gates, resumable heterogeneous-GPU runs, and reproducible results.",
-          details: ["CUDA", "profiling", "verification", "GPU"],
+            "Code-aware repository retrieval for coding agents: dense + sparse search, weighted RRF, bounded graph expansion, and freshness diagnostics.",
+          details: ["Python", "Qdrant", "MCP", "retrieval"],
         },
       ],
     },
@@ -161,16 +170,17 @@ export const siteContent = {
       ],
     },
     contact: {
-      eyebrow: "contact",
-      title: "The shortest path is a direct one.",
-      copy: "GitHub for the work. Email or Telegram for everything else.",
+      eyebrow: "direct contact",
+      title: "Contact",
+      copy:
+        "Project source code is on GitHub. You can reach me by email or Telegram.",
       github: "GitHub",
       email: "Email",
       telegram: "Telegram",
     },
     footer: {
       domain: "ezsx.xx.kg",
-      note: "built around the work",
+      note: "personal engineering projects",
     },
   },
   ru: {
@@ -195,8 +205,18 @@ export const siteContent = {
     work: {
       title: "Выбранные проекты",
       countLabel: "системы",
+      repositoryLabel: "репозиторий",
       technologiesLabel: "технологии",
       items: [
+        {
+          id: "seedforge",
+          name: "CUDA-поиск seed",
+          type: "публичный репозиторий",
+          repositoryHref: "https://github.com/ezsx/NoitaSeedSearcherCUDA",
+          description:
+            "Полный поиск seed с GPU-ускорением, проверками корректности, восстанавливаемыми запусками на неоднородных GPU и воспроизводимыми результатами.",
+          details: ["CUDA", "profiling", "verification", "GPU"],
+        },
         {
           id: "vpn",
           name: "Защищённое подключение",
@@ -206,31 +226,22 @@ export const siteContent = {
           details: ["Python", "PostgreSQL", "Redis", "Linux"],
         },
         {
-          id: "repo-semantic-mcp",
-          name: "repo-semantic-mcp",
-          type: "публичный репозиторий",
-          href: "https://github.com/ezsx/repo-semantic-mcp",
-          description:
-            "Поиск по репозиторию для coding agents: dense + sparse retrieval, взвешенный RRF, ограниченное расширение графа и диагностика актуальности индекса.",
-          details: ["Python", "Qdrant", "MCP", "retrieval"],
-        },
-        {
           id: "rag-app",
           name: "rag_app",
           type: "публичный репозиторий",
-          href: "https://github.com/ezsx/rag_app",
+          repositoryHref: "https://github.com/ezsx/rag_app",
           description:
             "Self-hosted RAG и ReAct с гибридным поиском, цитатами, локальным inference и независимым контуром оценки.",
           details: ["Python", "Qdrant", "LLM", "evaluation"],
         },
         {
-          id: "seedforge",
-          name: "seedforge",
+          id: "repo-semantic-mcp",
+          name: "repo-semantic-mcp",
           type: "публичный репозиторий",
-          href: "https://github.com/ezsx/seedforge",
+          repositoryHref: "https://github.com/ezsx/repo-semantic-mcp",
           description:
-            "Полный поиск seed с GPU-ускорением, проверками корректности, восстанавливаемыми запусками на неоднородных GPU и воспроизводимыми результатами.",
-          details: ["CUDA", "profiling", "verification", "GPU"],
+            "Поиск по репозиторию для coding agents: dense + sparse retrieval, взвешенный RRF, ограниченное расширение графа и диагностика актуальности индекса.",
+          details: ["Python", "Qdrant", "MCP", "retrieval"],
         },
       ],
     },
@@ -261,16 +272,17 @@ export const siteContent = {
       ],
     },
     contact: {
-      eyebrow: "контакты",
-      title: "Кратчайший путь — прямой.",
-      copy: "GitHub — для кода. Email или Telegram — для всего остального.",
+      eyebrow: "связь",
+      title: "Контакты",
+      copy:
+        "Исходный код проектов размещён на GitHub. Связаться со мной можно по email или в Telegram.",
       github: "GitHub",
       email: "Email",
       telegram: "Telegram",
     },
     footer: {
       domain: "ezsx.xx.kg",
-      note: "сайт построен вокруг реальной работы",
+      note: "личные инженерные проекты",
     },
   },
 } satisfies Record<Locale, SiteContent>;

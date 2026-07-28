@@ -43,9 +43,29 @@ async function render(pathname) {
 }
 
 function assertSharedPortfolio(html) {
+  const projectTargets = [
+    "#seedforge-core",
+    "#vpn-control-plane",
+    "#rag-evidence-system",
+    "#repo-semantic-context",
+  ];
+
   assert.match(html, /repo-semantic-mcp/);
   assert.match(html, /rag_app/);
   assert.match(html, /seedforge/);
+  assert.match(
+    html,
+    /https:\/\/github\.com\/ezsx\/NoitaSeedSearcherCUDA/,
+  );
+  for (const target of projectTargets) {
+    assert.match(html, new RegExp(`href="${target}"`));
+  }
+  for (let index = 1; index < projectTargets.length; index += 1) {
+    assert.ok(
+      html.indexOf(`href="${projectTargets[index - 1]}"`) <
+        html.indexOf(`href="${projectTargets[index]}"`),
+    );
+  }
   assert.match(html, /aria-controls="seedforge-system-story"/);
   assert.match(html, /aria-controls="vpn-system-story"/);
   assert.match(html, /aria-controls="rag-system-story"/);
@@ -85,6 +105,8 @@ function assertSharedPortfolio(html) {
   assert.match(html, /https:\/\/ezsx\.xx\.kg\/og\.png/);
   assert.doesNotMatch(html, /20\.9k/);
   assert.doesNotMatch(html, /POST \/config/);
+  assert.doesNotMatch(html, /[\u2013\u2014]/);
+  assert.doesNotMatch(html, /PixelBattle/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 }
 
@@ -93,7 +115,7 @@ test("server-renders localized English and Russian portfolio routes", async () =
     {
       pathname: "/",
       lang: "en",
-      title: /<title>ezsx — systems and tools<\/title>/i,
+      title: /<title>ezsx - systems and tools<\/title>/i,
       canonical:
         /rel="canonical" href="https:\/\/ezsx\.xx\.kg\/"/,
       activeLocale:
@@ -105,17 +127,17 @@ test("server-renders localized English and Russian portfolio routes", async () =
       phrases: [
         /Secure connectivity/,
         /Selected work/,
-        /reliable two-GPU research system/,
+        /Run a reliable exhaustive seed search across two GPUs/,
         /collapse story/,
         /P6 diagnostic snapshot/,
         /collapse profiler/,
         /One warp through the search/,
         /pause trace/,
         /optional precheck/,
-        /healthy node fleet/,
+        /Issue secure connections without losing control of the node fleet/,
         /Why the queue lives in PostgreSQL/,
         /Fleet cards are representative architecture/,
-        /From noisy Telegram posts to an answer you can inspect/,
+        /Answer questions over Telegram with evidence you can inspect/,
         /Inspect one question through retrieval/,
         /four different jobs/,
         /120 reviewed questions/,
@@ -128,9 +150,9 @@ test("server-renders localized English and Russian portfolio routes", async () =
       absent: [
         /Перейти к содержимому/,
         /свернуть историю/,
-        /От исходного CUDA-движка/,
+        /Запустить надёжный полный поиск seed на двух GPU/,
         /Почему очередь живёт в PostgreSQL/,
-        /От шумных Telegram-постов — к ответу, который можно проверить/,
+        /Отвечать по Telegram-корпусу с проверяемыми источниками/,
         /Найти нужные файлы до первой правки/,
         /Посмотреть путь одного repository-context запроса/,
       ],
@@ -138,7 +160,7 @@ test("server-renders localized English and Russian portfolio routes", async () =
     {
       pathname: "/ru",
       lang: "ru",
-      title: /<title>ezsx — системы и инструменты<\/title>/i,
+      title: /<title>ezsx - системы и инструменты<\/title>/i,
       canonical:
         /rel="canonical" href="https:\/\/ezsx\.xx\.kg\/ru"/,
       activeLocale:
@@ -150,16 +172,16 @@ test("server-renders localized English and Russian portfolio routes", async () =
       phrases: [
         /Защищённое подключение/,
         /Выбранные проекты/,
-        /От исходного CUDA-движка/,
+        /Запустить надёжный полный поиск seed на двух GPU/,
         /свернуть историю/,
         /Посмотреть устройство CUDA-воркера/,
         /свернуть профилировщик/,
         /Один warp проходит весь поиск/,
         /остановить трассу/,
-        /От одного запроса на подключение/,
+        /Выдавать защищённые подключения и сохранять парк нод управляемым/,
         /Почему очередь живёт в PostgreSQL/,
         /Карточки парка показывают репрезентативную архитектуру/,
-        /От шумных Telegram-постов — к ответу, который можно проверить/,
+        /Отвечать по Telegram-корпусу с проверяемыми источниками/,
         /Посмотреть, как один вопрос проходит retrieval/,
         /четыре разные задачи/,
         /120 проверенных вопросов/,
@@ -173,9 +195,9 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /Skip to content/,
         /Primary navigation/,
         /collapse story/,
-        /From an upstream CUDA engine/,
+        /Run a reliable exhaustive seed search across two GPUs/,
         /Why the queue lives in PostgreSQL/,
-        /From noisy Telegram posts to an answer you can inspect/,
+        /Answer questions over Telegram with evidence you can inspect/,
         /Find the files that matter before the first edit/,
         /Inspect one repository-context request/,
       ],
@@ -253,8 +275,14 @@ test("client bundles do not embed both locale dictionaries", async () => {
     )
   ).join("\n");
 
-  assert.doesNotMatch(source, /From an upstream CUDA engine/);
-  assert.doesNotMatch(source, /От исходного CUDA-движка/);
+  assert.doesNotMatch(
+    source,
+    /Run a reliable exhaustive seed search across two GPUs/,
+  );
+  assert.doesNotMatch(
+    source,
+    /Запустить надёжный полный поиск seed на двух GPU/,
+  );
   assert.doesNotMatch(source, /Inspect the CUDA worker/);
   assert.doesNotMatch(source, /Посмотреть устройство CUDA-воркера/);
   assert.doesNotMatch(source, /no enqueue before identity is verified/);
@@ -263,11 +291,11 @@ test("client bundles do not embed both locale dictionaries", async () => {
   assert.doesNotMatch(source, /Почему очередь живёт в PostgreSQL/);
   assert.doesNotMatch(
     source,
-    /From noisy Telegram posts to an answer you can inspect/,
+    /Answer questions over Telegram with evidence you can inspect/,
   );
   assert.doesNotMatch(
     source,
-    /От шумных Telegram-постов — к ответу, который можно проверить/,
+    /Отвечать по Telegram-корпусу с проверяемыми источниками/,
   );
   assert.doesNotMatch(source, /Inspect one question through retrieval/);
   assert.doesNotMatch(source, /Посмотреть, как один вопрос проходит retrieval/);

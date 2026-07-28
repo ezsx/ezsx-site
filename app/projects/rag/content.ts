@@ -28,7 +28,7 @@ export type RagContent = Readonly<{
 export const ragContent = {
   en: {
     kicker: "rag_app / self-hosted evidence system",
-    title: "From noisy Telegram posts to an answer you can inspect.",
+    title: "Answer questions over Telegram with evidence you can inspect.",
     intro: [
       "This is not a vector-database wrapper. The system maintains a changing corpus, plans each question, combines lexical and semantic recall, checks whether the evidence is sufficient, and only then writes a cited answer.",
       "The full path is self-hosted across Windows, WSL2 and Docker: Qwen on a V100, embedding and reranking on an RTX 5060 Ti, and FastAPI plus Qdrant on CPU.",
@@ -121,7 +121,7 @@ export const ragContent = {
   },
   ru: {
     kicker: "rag_app / self-hosted система доказательств",
-    title: "От шумных Telegram-постов — к ответу, который можно проверить.",
+    title: "Отвечать по Telegram-корпусу с проверяемыми источниками.",
     intro: [
       "Это не обёртка над векторной базой. Система поддерживает меняющийся корпус, планирует каждый вопрос, совмещает лексический и семантический поиск, проверяет достаточность доказательств и лишь затем формирует ответ с источниками.",
       "Весь контур работает локально между Windows, WSL2 и Docker: Qwen на V100, embedding и reranking на RTX 5060 Ti, FastAPI и Qdrant на CPU.",

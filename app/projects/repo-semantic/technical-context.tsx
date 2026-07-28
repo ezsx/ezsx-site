@@ -60,7 +60,7 @@ export const repoSemanticTechnicalCopy = {
     fusionLabel: "fusion contract",
     fusionValue: "weighted RRF · k = 60",
     fusionDetail:
-      "dense + sparse fuse first; that ranked slate and graph fuse again—raw scores are never treated as one scale",
+      "dense + sparse fuse first; that ranked slate and graph fuse again - raw scores are never treated as one scale",
     pinnedLabel: "exact-evidence guard",
     pinnedValue: "up to 5 exact hits pinned",
     pinnedDetail: "500 ms stage deadline · 400 ms HTTP timeout",
@@ -72,25 +72,25 @@ export const repoSemanticTechnicalCopy = {
     slateRows: [
       [
         "01",
-        "status/index_status.py · L196–301",
+        "status/index_status.py · L196-301",
         "D · S",
         "watcher state and recovery actions",
       ],
       [
         "02",
-        "status/summary.py · L319–477",
+        "status/summary.py · L319-477",
         "D · S · G",
         "compact state and next-action policy",
       ],
       [
         "03",
-        "watcher.py · L71–185",
+        "watcher.py · L71-185",
         "D · G",
         "runtime watcher and event batching",
       ],
       [
         "04",
-        "indexer.py · L265–458",
+        "indexer.py · L265-458",
         "S · G",
         "bounded startup reconcile",
       ],
@@ -134,7 +134,7 @@ export const repoSemanticTechnicalCopy = {
     traceNote:
       "The request above is a representative schematic assembled from implemented contracts, not a recorded query or live telemetry. Graph expansion is optional and compatibility-auto is disabled by default.",
     metricNote:
-      "Scale counts come from the dated May 7 private-repository checkpoint. Retrieval metrics come from a frozen 24-task self-repository, file-localization artifact with no line-range labels—not a neutral public benchmark; exact identifiers still require local rg.",
+      "Scale counts come from the dated May 7 private-repository checkpoint. Retrieval metrics come from a frozen 24-task self-repository, file-localization artifact with no line-range labels - not a neutral public benchmark; exact identifiers still require local rg.",
   },
   ru: {
     eyebrow: "технический слой / контракт контекста",
@@ -206,25 +206,25 @@ export const repoSemanticTechnicalCopy = {
     slateRows: [
       [
         "01",
-        "status/index_status.py · L196–301",
+        "status/index_status.py · L196-301",
         "D · S",
         "состояние watcher и recovery actions",
       ],
       [
         "02",
-        "status/summary.py · L319–477",
+        "status/summary.py · L319-477",
         "D · S · G",
         "компактное состояние и policy действий",
       ],
       [
         "03",
-        "watcher.py · L71–185",
+        "watcher.py · L71-185",
         "D · G",
         "runtime watcher и batching событий",
       ],
       [
         "04",
-        "indexer.py · L265–458",
+        "indexer.py · L265-458",
         "S · G",
         "ограниченный startup reconcile",
       ],
@@ -266,9 +266,9 @@ export const repoSemanticTechnicalCopy = {
     boundaryDetail:
       "Сервис возвращает grounded candidates и diagnostics. Coding-агент сам читает source, проверяет exact literals, строит план изменения и отвечает за edit.",
     traceNote:
-      "Запрос выше — репрезентативная схема из реализованных contracts, а не записанный query или live telemetry. Graph expansion опционален, а compatibility-auto по умолчанию отключён.",
+      "Запрос выше - репрезентативная схема из реализованных contracts, а не записанный query или live telemetry. Graph expansion опционален, а compatibility-auto по умолчанию отключён.",
     metricNote:
-      "Масштаб взят из датированного 7 мая checkpoint private-репозитория. Retrieval-метрики — из зафиксированного self-repo artifact на 24 file-localization задачах без line-range labels, а не из нейтрального public benchmark; exact identifiers всё равно проверяются локальным rg.",
+      "Масштаб взят из датированного 7 мая checkpoint private-репозитория. Retrieval-метрики - из зафиксированного self-repo artifact на 24 file-localization задачах без line-range labels, а не из нейтрального public benchmark; exact identifiers всё равно проверяются локальным rg.",
   },
 } as const;
 

@@ -51,7 +51,7 @@ export const seedforgeTechnicalCopy = {
     profilerReading: "profiler reading",
     reading: "Sparse, divergent and latency / issue limited.",
     conclusion:
-      "Peak compute and DRAM remain mostly idle. A historical P3 differential isolated pathfinding plus retry at 83.8%; the P6 counters above profile the whole kernel, and neither number is final-P7 stage-time attribution. Dependent memory work, queue pressure and only 3–4 active lanes still show meaningful headroom.",
+      "Peak compute and DRAM remain mostly idle. A historical P3 differential isolated pathfinding plus retry at 83.8%; the P6 counters above profile the whole kernel, and neither number is final-P7 stage-time attribution. Dependent memory work, queue pressure and only 3-4 active lanes still show meaningful headroom.",
     capacityNote:
       "* 59.5k V100 + 75.7k RTX 5060 Ti, measured independently on the coalmine workload before orchestration overhead.",
     upstreamPrefix: "Seedforge extends the",
@@ -86,7 +86,7 @@ export const seedforgeTechnicalCopy = {
       "Подсветка фазы основана на исходном коде; измеренные значения относятся ко всему ядру. Эти независимые счётчики пиковой загрузки не складываются в 100%. FMA не является чистым счётчиком FP32. FP16, Tensor и TEX в этом снимке равны 0%.",
     workload: "смешанная нерегулярная нагрузка",
     workloadDetail:
-      "Доминируют INT, память и управление; FP64 — узкий путь игрового паритета, а не узкое место.",
+      "Доминируют INT, память и управление; FP64 - узкий путь игрового паритета, а не узкое место.",
     finalLaunch: "финальный запуск P7",
     finalLaunchConfig: "1440 блоков × 64 · 3 волны · span 8",
     counterHistory: "Показанные счётчики были сняты до финального ядра.",
@@ -109,7 +109,7 @@ export const seedforgeTechnicalCopy = {
     profilerReading: "вывод профилировщика",
     reading: "Разреженная, дивергентная и ограниченная задержками / issue.",
     conclusion:
-      "Пиковые compute и DRAM в основном простаивают. Историческое сравнение P3 выделило pathfinding вместе с retry на уровне 83,8%; счётчики P6 выше относятся ко всему ядру, и ни одно из этих значений не является распределением времени по стадиям финального P7. Зависимая работа с памятью, давление очереди и лишь 3–4 активных lane по-прежнему оставляют заметный резерв.",
+      "Пиковые compute и DRAM в основном простаивают. Историческое сравнение P3 выделило pathfinding вместе с retry на уровне 83,8%; счётчики P6 выше относятся ко всему ядру, и ни одно из этих значений не является распределением времени по стадиям финального P7. Зависимая работа с памятью, давление очереди и лишь 3-4 активных lane по-прежнему оставляют заметный резерв.",
     capacityNote:
       "* 59.5k на V100 + 75.7k на RTX 5060 Ti, независимо измеренные на нагрузке coalmine до накладных расходов оркестрации.",
     upstreamPrefix: "Seedforge расширяет",

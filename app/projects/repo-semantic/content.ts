@@ -89,7 +89,7 @@ export const repoSemanticContent = {
         summary:
           "Strong seed chunks can expand through typed imports, routes, tests, docs, environment and policy links.",
         detail:
-          "Graph retrieval is optional, bounded and freshness-gated—not a silent planner. Exact handoff suppresses it; stale or unsafe graph state returns a warning and a recovery action instead of pretending certainty.",
+          "Graph retrieval is optional, bounded and freshness-gated - not a silent planner. Exact handoff suppresses it; stale or unsafe graph state returns a warning and a recovery action instead of pretending certainty.",
         tags: [
           "max 20 graph seeds",
           "typed evidence paths",
@@ -146,7 +146,7 @@ export const repoSemanticContent = {
     title: "Найти нужные файлы до первой правки.",
     intro: [
       "Coding-агент силён, когда получил правильный контекст. В незнакомом репозитории дорого не написать код, а найти реализацию, тесты, документацию и конфигурацию, не приняв правдоподобное совпадение за доказательство.",
-      "repo-semantic-mcp — не скрытый coding-агент. Он поддерживает карту репозитория свежей, объединяет смысл и точные термины, при необходимости добавляет ограниченный структурный контекст и возвращает диапазоны файлов вместе с явными действиями для проверки.",
+      "repo-semantic-mcp - не скрытый coding-агент. Он поддерживает карту репозитория свежей, объединяет смысл и точные термины, при необходимости добавляет ограниченный структурный контекст и возвращает диапазоны файлов вместе с явными действиями для проверки.",
     ],
     navLabel: "История retrieval-контекста репозитория",
     stages: [
@@ -186,7 +186,7 @@ export const repoSemanticContent = {
         result: "ранжированный seed context",
         title: "Разделить поиск по смыслу и точным терминам",
         summary:
-          "Исходный вопрос идёт в dense-поиск, нормализованные code terms — в sparse, а weighted RRF объединяет ранги, не смешивая несопоставимые scores.",
+          "Исходный вопрос идёт в dense-поиск, нормализованные code terms - в sparse, а weighted RRF объединяет ранги, не смешивая несопоставимые scores.",
         detail:
           "Exact-looking anchors меняют приоритеты веток и никогда не считаются только семантическим доказательством. Опциональный reranker лишь переставляет ограниченный slate, фиксирует exact hits и безопасно откатывается при timeout.",
         tags: [
@@ -203,7 +203,7 @@ export const repoSemanticContent = {
         summary:
           "Сильные seed chunks могут раскрыться через типизированные связи imports, routes, tests, docs, environment и policy.",
         detail:
-          "Graph retrieval опционален, ограничен и зависит от freshness — это не скрытый planner. Exact handoff отключает его, а stale или небезопасное состояние возвращает warning и recovery action вместо ложной уверенности.",
+          "Graph retrieval опционален, ограничен и зависит от freshness - это не скрытый planner. Exact handoff отключает его, а stale или небезопасное состояние возвращает warning и recovery action вместо ложной уверенности.",
         tags: [
           "не более 20 graph seeds",
           "типизированные evidence paths",
@@ -222,7 +222,7 @@ export const repoSemanticContent = {
         tags: [
           "file groups + line ranges",
           "uncovered terms",
-          "local rg — authority",
+          "local rg - authority",
         ],
       },
     ],

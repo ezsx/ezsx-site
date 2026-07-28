@@ -5,21 +5,21 @@ const canonicalUrl = new URL("https://ezsx.xx.kg");
 
 const metadataCopy = {
   en: {
-    title: "ezsx — systems and tools",
+    title: "ezsx - systems and tools",
     description:
       "Python systems across backend, Linux infrastructure, secure connectivity, retrieval, and GPU compute.",
     openGraphDescription:
       "Backend, platform, secure connectivity, retrieval, and GPU compute.",
-    imageAlt: "ezsx — backend, platform, retrieval, compute",
+    imageAlt: "ezsx - backend, platform, retrieval, compute",
     openGraphLocale: "en_US",
   },
   ru: {
-    title: "ezsx — системы и инструменты",
+    title: "ezsx - системы и инструменты",
     description:
       "Python-системы: бэкенд, Linux-инфраструктура, защищённые подключения, retrieval и GPU-вычисления.",
     openGraphDescription:
       "Бэкенд, платформа, защищённые подключения, retrieval и GPU-вычисления.",
-    imageAlt: "ezsx — бэкенд, платформа, retrieval, вычисления",
+    imageAlt: "ezsx - бэкенд, платформа, retrieval, вычисления",
     openGraphLocale: "ru_RU",
   },
 } as const;

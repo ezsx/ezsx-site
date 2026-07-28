@@ -19,6 +19,10 @@
     max-width: 270px;
   }
 
+  .route-node b {
+    display: none;
+  }
+
   .section-heading {
     margin-bottom: 34px;
   }

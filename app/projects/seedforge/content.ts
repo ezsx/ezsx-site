@@ -28,8 +28,7 @@ export type SeedforgeContent = Readonly<{
 export const seedforgeContent = {
   en: {
     kicker: "seedforge / verified GPU search",
-    title:
-      "From an upstream CUDA engine to a reliable two-GPU research system.",
+    title: "Run a reliable exhaustive seed search across two GPUs.",
     intro: [
       "A Noita seed deterministically defines a world. Seedforge reconstructs billions of those worlds on GPU, checks 22 target biomes for rare objects, and keeps only canonical, recoverable results.",
       "The central work was making the inherited path operational, accurate, complete and crash-safe. Kernel profiling and tuning came after that foundation worked end to end.",
@@ -138,8 +137,7 @@ export const seedforgeContent = {
   },
   ru: {
     kicker: "seedforge / проверенный GPU-поиск",
-    title:
-      "От исходного CUDA-движка — к надёжной исследовательской системе на двух GPU.",
+    title: "Запустить надёжный полный поиск seed на двух GPU.",
     intro: [
       "Seed в Noita детерминированно задаёт мир. Seedforge реконструирует миллиарды таких миров на GPU, проверяет 22 целевых биома на редкие объекты и сохраняет только канонические, восстанавливаемые результаты.",
       "Главная работа состояла в том, чтобы сделать унаследованный путь рабочим, точным, полным и устойчивым к сбоям. Профилирование и настройка ядра начались уже после того, как вся система заработала целиком.",
@@ -152,7 +150,7 @@ export const seedforgeContent = {
         result: "рабочий CUDA-запуск",
         title: "CUDA-путь, который выдаёт результат",
         summary:
-          "Сначала нужно было устранить ошибки сборки и выполнения — только потом имела смысл скорость поиска.",
+          "Сначала нужно было устранить ошибки сборки и выполнения - только потом имела смысл скорость поиска.",
         detail:
           "Нативные CUDA-сборки загружают данные Noita, проверяют выбранное устройство и передают структурированный прогресс и найденные результаты через укреплённый bridge. Неудачный запуск или пустой прогон не засчитывается как выполненная работа.",
         tags: [

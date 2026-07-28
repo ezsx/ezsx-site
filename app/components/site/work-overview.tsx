@@ -1,4 +1,7 @@
-import type { SiteContent } from "../../content/site";
+import {
+  workStoryHrefs,
+  type SiteContent,
+} from "../../content/site";
 import Arrow from "./arrow";
 
 export default function WorkOverview({ content }: { content: SiteContent }) {
@@ -27,13 +30,12 @@ export default function WorkOverview({ content }: { content: SiteContent }) {
 
               <div className="work-name">
                 <h3>
-                  {item.href ? (
-                    <a href={item.href} target="_blank" rel="noreferrer">
-                      {item.name} <Arrow />
-                    </a>
-                  ) : (
-                    item.name
-                  )}
+                  <a href={workStoryHrefs[item.id]}>
+                    {item.name}
+                    <span aria-hidden="true" className="work-jump-mark">
+                      ↓
+                    </span>
+                  </a>
                 </h3>
                 <span>{item.type}</span>
               </div>
@@ -47,6 +49,16 @@ export default function WorkOverview({ content }: { content: SiteContent }) {
                     <li key={detail}>{detail}</li>
                   ))}
                 </ul>
+                {item.repositoryHref ? (
+                  <a
+                    className="work-repository-link"
+                    href={item.repositoryHref}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {content.work.repositoryLabel} <Arrow />
+                  </a>
+                ) : null}
               </div>
             </article>
           );

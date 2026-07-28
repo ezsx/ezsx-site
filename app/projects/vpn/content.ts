@@ -28,7 +28,7 @@ export type VpnContent = Readonly<{
 export const vpnContent = {
   en: {
     kicker: "vpn server / secure connectivity control plane",
-    title: "From one connection request to a healthy node fleet.",
+    title: "Issue secure connections without losing control of the node fleet.",
     intro: [
       "The system authenticates a device, finds protocol-ready capacity and returns an AWG or Xray configuration through one asynchronous Connect Flow.",
       "The larger job is keeping the control-plane ledger and the Linux fleet truthful through retries, restarts, refills, cleanup and node lifecycle changes.",
@@ -121,10 +121,11 @@ export const vpnContent = {
   },
   ru: {
     kicker: "vpn server / control plane защищённого подключения",
-    title: "От одного запроса на подключение — к здоровому парку нод.",
+    title:
+      "Выдавать защищённые подключения и сохранять парк нод управляемым.",
     intro: [
       "Система аутентифицирует устройство, находит готовую ёмкость нужного протокола и возвращает конфигурацию AWG или Xray через единый асинхронный Connect Flow.",
-      "Более крупная задача — сохранять правдивое состояние реестра control plane и Linux-нод при повторах, перезапусках, пополнении, очистке и изменениях жизненного цикла.",
+      "Более крупная задача - сохранять правдивое состояние реестра control plane и Linux-нод при повторах, перезапусках, пополнении, очистке и изменениях жизненного цикла.",
     ],
     navLabel: "История control plane VPN",
     stages: [

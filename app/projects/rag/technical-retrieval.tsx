@@ -164,11 +164,11 @@ export const ragTechnicalCopy = {
     stateLabel: "API + состояние",
     stateValue: "FastAPI · Qdrant · Langfuse",
     boundaryReason:
-      "V100 работает в Windows TCC mode. Retrieval на GPU остаётся WSL2-native на RTX 5060 Ti, а Docker — CPU-only; явные HTTP-границы превращают это аппаратное ограничение в обычную сервисную топологию.",
+      "V100 работает в Windows TCC mode. Retrieval на GPU остаётся WSL2-native на RTX 5060 Ti, а Docker - CPU-only; явные HTTP-границы превращают это аппаратное ограничение в обычную сервисную топологию.",
     traceNote:
-      "Трасса — записанный пример RUN-008, а не live telemetry: 3 запланированных запроса, 28 найденных документов, 5 оставленных citations и coverage 1.00.",
+      "Трасса - записанный пример RUN-008, а не live telemetry: 3 запланированных запроса, 28 найденных документов, 5 оставленных citations и coverage 1.00.",
     metricNote:
-      "Публичные метрики сохраняют разные denominators: в RUN-009 — 120 проверенных вопросов; factual рассчитан по 105 answerable, evidence support — по 65 retrieval-evidence кейсам.",
+      "Публичные метрики сохраняют разные denominators: в RUN-009 - 120 проверенных вопросов; factual рассчитан по 105 answerable, evidence support - по 65 retrieval-evidence кейсам.",
   },
 } as const;
 
