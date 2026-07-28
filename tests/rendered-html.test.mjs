@@ -59,6 +59,15 @@ test("server-renders the ezsx index", async () => {
   assert.match(html, /historical P3/i);
   assert.doesNotMatch(html, /20\.9k/);
   assert.doesNotMatch(html, /pathfinding takes roughly 84%/i);
+  assert.match(html, /healthy node fleet/);
+  assert.match(html, /aria-controls="vpn-system-story"/);
+  assert.match(html, /POST \/v1\/connect-flow\/connect/);
+  assert.match(html, /Why the queue lives in PostgreSQL/);
+  assert.match(html, /SKIP LOCKED/);
+  assert.match(html, /RabbitMQ/);
+  assert.match(html, /Kafka/);
+  assert.match(html, /Fleet cards are representative architecture/);
+  assert.doesNotMatch(html, /POST \/config/);
   assert.match(html, /scdcor@gmail\.com/);
   assert.match(html, /rel="canonical" href="https:\/\/ezsx\.xx\.kg\/"/);
   assert.match(html, /https:\/\/ezsx\.xx\.kg\/og\.png/);

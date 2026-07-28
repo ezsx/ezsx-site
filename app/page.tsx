@@ -1,4 +1,5 @@
 import SeedforgeKernel from "./seedforge-kernel";
+import VpnSystemStory from "./vpn-system-story";
 
 const work = [
   {
@@ -163,6 +164,7 @@ export default function Home() {
             </div>
 
             <SeedforgeKernel />
+            <VpnSystemStory />
           </section>
 
           <section
