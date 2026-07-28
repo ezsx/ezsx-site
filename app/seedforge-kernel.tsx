@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import CudaSearchTrace, {
+  CUDA_TRACE_PHASES,
+  type CudaPipelineId,
+  type CudaTracePhaseId,
+} from "./cuda-search-trace";
 
 type StageId = "run" | "prove" | "cover" | "orchestrate" | "publish";
 
@@ -108,6 +113,57 @@ const profileMetrics = [
   { label: "DRAM SOL", value: 8, display: "8.00%" },
   { label: "Issue slots busy", value: 20.39, display: "20.39%" },
   { label: "Achieved occupancy", value: 14.66, display: "14.66%" },
+];
+
+const cudaPipelines: {
+  id: CudaPipelineId;
+  label: string;
+  value: number;
+  display: string;
+  detail: string;
+}[] = [
+  {
+    id: "alu",
+    label: "ALU / INT",
+    value: 7.937,
+    display: "7.94%",
+    detail: "indices · bitwise · counters",
+  },
+  {
+    id: "fma",
+    label: "FMA pipe",
+    value: 5.536,
+    display: "5.54%",
+    detail: "includes FP32 math",
+  },
+  {
+    id: "lsu",
+    label: "LSU / LD-ST",
+    value: 8.18,
+    display: "8.18%",
+    detail: "arena · maps · bitsets",
+  },
+  {
+    id: "cbu",
+    label: "CBU / control",
+    value: 4.204,
+    display: "4.20%",
+    detail: "gates · branches · retry",
+  },
+  {
+    id: "xu",
+    label: "XU / special",
+    value: 4.093,
+    display: "4.09%",
+    detail: "special-function path",
+  },
+  {
+    id: "fp64",
+    label: "FP64",
+    value: 0.144,
+    display: "0.14%",
+    detail: "parity-sensitive RNG",
+  },
 ];
 
 function RuntimeScene() {
@@ -323,9 +379,17 @@ export default function SeedforgeKernel() {
   const [playing, setPlaying] = useState(false);
   const [inView, setInView] = useState(false);
   const [motion, setMotion] = useState<"unknown" | "full" | "reduce">("unknown");
+  const [cudaPhase, setCudaPhase] =
+    useState<CudaTracePhaseId>("dispatch");
+  const [cudaTracePlaying, setCudaTracePlaying] = useState(false);
   const storyRef = useRef<HTMLElement>(null);
   const hasAutoPlayed = useRef(false);
   const stage = storyStages[activeStage];
+  const cudaPhaseIndex = CUDA_TRACE_PHASES.findIndex(
+    (item) => item.id === cudaPhase,
+  );
+  const cudaPhaseDetail =
+    CUDA_TRACE_PHASES[cudaPhaseIndex] ?? CUDA_TRACE_PHASES[0];
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -552,14 +616,87 @@ export default function SeedforgeKernel() {
                 </div>
               </div>
 
-              <div className="sm-grid" aria-hidden="true">
+              <div
+                aria-hidden="true"
+                className={`sm-grid ${cudaTracePlaying ? "is-playing" : ""}`}
+                data-phase={cudaPhase}
+              >
                 {Array.from({ length: 80 }, (_, index) => (
-                  <span key={index} />
+                  <span
+                    className={
+                      (index + cudaPhaseIndex * 3) % 10 < 2
+                        ? "is-cohort"
+                        : undefined
+                    }
+                    key={index}
+                  >
+                    {Array.from({ length: 6 }, (_, slot) => (
+                      <i
+                        key={slot}
+                        style={{
+                          animationDelay: `${(index % 10) * 32 + slot * 75}ms`,
+                        }}
+                      />
+                    ))}
+                  </span>
                 ))}
               </div>
               <div className="sm-caption">
-                <span>80 SM topology · not a per-SM heat map</span>
-                <span>device-wide · MAXRREG 160 · 9.38 active warps / SM</span>
+                <span>80 SM × up to 6 resident blocks · P6 register limit</span>
+                <span>representative cohort · not per-SM telemetry</span>
+              </div>
+
+              <div className="sm-phase-readout">
+                <span>representative block stage</span>
+                <strong>
+                  {cudaPhaseDetail.number} · {cudaPhaseDetail.axis}
+                </strong>
+                <small>
+                  {cudaPhaseDetail.status}. Every SM can execute every stage.
+                </small>
+              </div>
+
+              <section
+                className="sm-pipelines"
+                aria-labelledby="sm-pipelines-title"
+              >
+                <div className="sm-pipelines-heading">
+                  <span id="sm-pipelines-title">instruction pipelines</span>
+                  <strong>P6 whole kernel · % active-cycle peak</strong>
+                </div>
+                <div className="sm-pipeline-grid">
+                  {cudaPipelines.map((pipeline) => (
+                    <div
+                      className={
+                        cudaPhaseDetail.pipelines.includes(pipeline.id)
+                          ? "is-phase-affinity"
+                          : undefined
+                      }
+                      key={pipeline.id}
+                    >
+                      <span>{pipeline.label}</span>
+                      <strong>{pipeline.display}</strong>
+                      <i aria-hidden="true">
+                        <b style={{ width: `${pipeline.value}%` }} />
+                      </i>
+                      <small>{pipeline.detail}</small>
+                    </div>
+                  ))}
+                </div>
+                <p>
+                  Source-informed phase highlight; measured values remain
+                  whole-kernel. These independent peak-utilization counters do
+                  not sum to 100%. FMA is not a pure FP32 counter. FP16, Tensor
+                  and TEX were 0% in this snapshot.
+                </p>
+              </section>
+
+              <div className="sm-workload-note">
+                <strong>mixed irregular workload</strong>
+                <span>
+                  INT / memory / control dominate; FP64 is a narrow
+                  game-parity path, not the bottleneck.
+                </span>
               </div>
 
               <div className="final-launch-note">
@@ -604,16 +741,23 @@ export default function SeedforgeKernel() {
             </div>
           </div>
 
+          <CudaSearchTrace
+            onPhaseChange={setCudaPhase}
+            onPlaybackChange={setCudaTracePlaying}
+          />
+
           <div className="profile-conclusion">
             <div>
               <span>profiler reading</span>
               <strong>Sparse, divergent and latency / issue limited.</strong>
             </div>
             <p>
-              Peak compute and DRAM remain mostly idle while pathfinding takes
-              roughly 84% of the coalmine wall time. Dependent memory work,
-              queue pressure and only 3–4 active lanes leave meaningful
-              headroom for future kernel work.
+              Peak compute and DRAM remain mostly idle. A historical P3
+              differential isolated pathfinding plus retry at 83.8%; the P6
+              counters above profile the whole kernel, and neither number is
+              final-P7 stage-time attribution. Dependent memory work, queue
+              pressure and only 3–4 active lanes still show meaningful
+              headroom.
             </p>
           </div>
         </details>

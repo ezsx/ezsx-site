@@ -42,7 +42,15 @@ test("server-renders the ezsx index", async () => {
   assert.match(html, /433 \/ 433/);
   assert.match(html, /P6 diagnostic snapshot/);
   assert.match(html, /3\.08 \/ 32/);
+  assert.match(html, /One warp through the search/);
+  assert.match(html, /pause trace/);
+  assert.match(html, /optional precheck/);
+  assert.match(html, /ALU \/ INT/);
+  assert.match(html, /0\.14%/);
+  assert.match(html, /not per-SM telemetry/);
+  assert.match(html, /historical P3/i);
   assert.doesNotMatch(html, /20\.9k/);
+  assert.doesNotMatch(html, /pathfinding takes roughly 84%/i);
   assert.match(html, /scdcor@gmail\.com/);
   assert.match(html, /rel="canonical" href="https:\/\/ezsx\.xx\.kg\/"/);
   assert.match(html, /https:\/\/ezsx\.xx\.kg\/og\.png/);
