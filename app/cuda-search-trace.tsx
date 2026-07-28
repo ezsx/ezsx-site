@@ -186,8 +186,13 @@ function drawTrace(
   context.setTransform(dpr, 0, 0, dpr, 0, 0);
   context.clearRect(0, 0, width, height);
 
-  const positions = [0.045, 0.155, 0.285, 0.42, 0.65, 0.755, 0.855, 0.95].map(
-    (position) => width * position,
+  const columnCount = CUDA_TRACE_PHASES.length;
+  const positions = CUDA_TRACE_PHASES.map(
+    (_, index) => width * ((index + 0.5) / columnCount),
+  );
+  const boundaries = Array.from(
+    { length: columnCount - 1 },
+    (_, index) => width * ((index + 1) / columnCount),
   );
   const top = 34;
   const bottom = height - 32;
@@ -216,7 +221,7 @@ function drawTrace(
   context.strokeStyle = palette.line;
   context.lineWidth = 1;
   context.setLineDash([2, 5]);
-  for (const x of positions.slice(1)) {
+  for (const x of boundaries) {
     context.beginPath();
     context.moveTo(x, 16);
     context.lineTo(x, height - 16);
