@@ -1,94 +1,15 @@
 "use client";
 
+/** Project-local canvas renderer for the Seedforge CUDA execution trace. */
+
 import { useEffect, useRef, useState } from "react";
+import type {
+  CudaPipelineId,
+  CudaTraceCopy,
+  CudaTracePhase,
+  CudaTracePhaseId,
+} from "./cuda-trace-content";
 
-export type CudaPipelineId = "alu" | "fma" | "lsu" | "cbu" | "xu" | "fp64";
-
-export type CudaTracePhaseId =
-  | "dispatch"
-  | "precheck"
-  | "wang"
-  | "path"
-  | "hooks"
-  | "objects"
-  | "filter"
-  | "commit";
-
-type CudaTracePhase = {
-  id: CudaTracePhaseId;
-  number: string;
-  axis: string;
-  status: string;
-  summary: string;
-  pipelines: CudaPipelineId[];
-};
-
-export const CUDA_TRACE_PHASES: CudaTracePhase[] = [
-  {
-    id: "dispatch",
-    number: "01",
-    axis: "span × 8",
-    status: "dispatching 64-thread blocks",
-    summary: "each CUDA thread receives a short seed span",
-    pipelines: ["alu", "lsu", "cbu"],
-  },
-  {
-    id: "precheck",
-    number: "02",
-    axis: "optional precheck",
-    status: "running configured cheap gates",
-    summary: "reject or bypass before world reconstruction",
-    pipelines: ["alu", "fma", "cbu", "fp64"],
-  },
-  {
-    id: "wang",
-    number: "03",
-    axis: "Wang layout",
-    status: "building compact tile indices",
-    summary: "PRNG, Wang layout and path-bit inputs",
-    pipelines: ["alu", "fma", "lsu", "xu", "fp64"],
-  },
-  {
-    id: "path",
-    number: "04",
-    axis: "path + retry",
-    status: "walking sparse traversability paths",
-    summary: "bitmap predicates, DFS, visited state and retry",
-    pipelines: ["alu", "lsu", "cbu", "xu"],
-  },
-  {
-    id: "hooks",
-    number: "05",
-    axis: "spawn hooks",
-    status: "scanning baked Wang spawn hooks",
-    summary: "bounds, room, color, biome and chunk gates",
-    pipelines: ["alu", "lsu", "cbu"],
-  },
-  {
-    id: "objects",
-    number: "06",
-    axis: "pixel-scene",
-    status: "resolving scene and object candidates",
-    summary: "descriptor selection and nested spawn indexing",
-    pipelines: ["alu", "fma", "lsu", "fp64"],
-  },
-  {
-    id: "filter",
-    number: "07",
-    axis: "hit filter",
-    status: "feeding the incremental filter",
-    summary: "match counters accept only requested records",
-    pipelines: ["alu", "lsu", "cbu"],
-  },
-  {
-    id: "commit",
-    number: "08",
-    axis: "binary hit",
-    status: "returning the accepted payload",
-    summary: "GPU result first; canonical evidence is host-side",
-    pipelines: ["alu", "lsu"],
-  },
-];
 
 const PHASE_STARTS = [0, 0.1, 0.2, 0.36, 0.64, 0.74, 0.83, 0.93];
 const PHASE_ENDS = [0.1, 0.2, 0.36, 0.64, 0.74, 0.83, 0.93, 1];
@@ -121,7 +42,7 @@ function ease(value: number) {
 
 function phaseIndexFromProgress(progress: number) {
   const index = PHASE_ENDS.findIndex((end) => progress <= end);
-  return index < 0 ? CUDA_TRACE_PHASES.length - 1 : index;
+  return index < 0 ? PHASE_ENDS.length - 1 : index;
 }
 
 function manualProgress(index: number) {
@@ -186,8 +107,8 @@ function drawTrace(
   context.setTransform(dpr, 0, 0, dpr, 0, 0);
   context.clearRect(0, 0, width, height);
 
-  const columnCount = CUDA_TRACE_PHASES.length;
-  const positions = CUDA_TRACE_PHASES.map(
+  const columnCount = PHASE_ENDS.length;
+  const positions = PHASE_ENDS.map(
     (_, index) => width * ((index + 0.5) / columnCount),
   );
   const boundaries = Array.from(
@@ -419,13 +340,17 @@ function drawTrace(
 }
 
 type CudaSearchTraceProps = {
+  copy: CudaTraceCopy;
   onPhaseChange: (phase: CudaTracePhaseId) => void;
   onPlaybackChange: (playing: boolean) => void;
+  phases: readonly CudaTracePhase[];
 };
 
 export default function CudaSearchTrace({
+  copy: text,
   onPhaseChange,
   onPlaybackChange,
+  phases,
 }: CudaSearchTraceProps) {
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [run, setRun] = useState(0);
@@ -437,7 +362,7 @@ export default function CudaSearchTrace({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
-  const phase = CUDA_TRACE_PHASES[phaseIndex];
+  const phase = phases[phaseIndex];
   const playing = inViewport && !reducedMotion && !paused && !complete;
 
   useEffect(() => {
@@ -466,7 +391,7 @@ export default function CudaSearchTrace({
       if (reportedPhase === nextPhase) return;
       reportedPhase = nextPhase;
       setPhaseIndex(nextPhase);
-      onPhaseChange(CUDA_TRACE_PHASES[nextPhase].id);
+      onPhaseChange(phases[nextPhase].id);
     };
 
     const resize = () => {
@@ -582,11 +507,11 @@ export default function CudaSearchTrace({
       motionMedia.removeEventListener("change", onMotionPreference);
       colorMedia.removeEventListener("change", onColorPreference);
     };
-  }, [manualPhase, onPhaseChange, paused, run]);
+  }, [manualPhase, onPhaseChange, paused, phases, run]);
 
   const controlTrace = () => {
     if (reducedMotion) {
-      setManualPhase((current) => (current + 1) % CUDA_TRACE_PHASES.length);
+      setManualPhase((current) => (current + 1) % phases.length);
       return;
     }
     if (!complete) {
@@ -606,8 +531,8 @@ export default function CudaSearchTrace({
     >
       <div className="trace-toolbar">
         <div>
-          <span>execution trace / final P7 schematic</span>
-          <strong id="cuda-trace-title">One warp through the search</strong>
+          <span>{text.eyebrow}</span>
+          <strong id="cuda-trace-title">{text.title}</strong>
         </div>
         <div className="trace-toolbar-actions">
           <span
@@ -619,18 +544,18 @@ export default function CudaSearchTrace({
           </span>
           <button onClick={controlTrace} type="button">
             {reducedMotion
-              ? "next stage"
+              ? text.next
               : complete
-                ? "replay trace"
+                ? text.replay
                 : paused
-                  ? "resume trace"
-                  : "pause trace"}
+                  ? text.resume
+                  : text.pause}
           </button>
         </div>
       </div>
 
-      <ol className="trace-axis" aria-label="CUDA search stages">
-        {CUDA_TRACE_PHASES.map((item, index) => (
+      <ol className="trace-axis" aria-label={text.stages}>
+        {phases.map((item, index) => (
           <li
             className={index === phaseIndex ? "is-active" : undefined}
             key={item.id}
@@ -644,32 +569,26 @@ export default function CudaSearchTrace({
 
       <div className="trace-canvas-host" ref={hostRef}>
         <canvas
-          aria-label="Representative 32-lane CUDA warp trace: dispatch, optional precheck, Wang layout, bitmap path traversal and retry, spawn hooks, pixel-scene and object selection, incremental hit filtering, then a binary result returned to the host"
+          aria-label={text.canvas}
           ref={canvasRef}
           role="img"
         />
       </div>
 
       <div className="trace-bottom">
-        <ul className="trace-legend" aria-label="Execution trace legend">
-          <li><i className="trace-seed" aria-hidden="true" />seed span</li>
-          <li><i className="trace-reject" aria-hidden="true" />configured reject</li>
-          <li><i className="trace-lane" aria-hidden="true" />active lane</li>
-          <li><i className="trace-hit" aria-hidden="true" />accepted binary hit</li>
+        <ul className="trace-legend" aria-label={text.legend}>
+          <li><i className="trace-seed" aria-hidden="true" />{text.seed}</li>
+          <li><i className="trace-reject" aria-hidden="true" />{text.reject}</li>
+          <li><i className="trace-lane" aria-hidden="true" />{text.lane}</li>
+          <li><i className="trace-hit" aria-hidden="true" />{text.hit}</li>
         </ul>
         <div className="trace-gate">
-          <span>release evidence / host side</span>
-          <strong>binary payload → canonical bytes → CPU = V100 = RTX</strong>
+          <span>{text.evidence}</span>
+          <strong>{text.release}</strong>
         </div>
       </div>
 
-      <p className="trace-caveat">
-        Sequence, lane masks, SM cohort and duration are schematic—not
-        stage-time or per-SM telemetry. Static prechecks are configuration
-        dependent; the profiled default coalmine command bypassed them. The
-        3.08-lane and pipeline counters are P6 diagnostic context, while this
-        trace follows the final P7 search shape.
-      </p>
+      <p className="trace-caveat">{text.caveat}</p>
     </section>
   );
 }

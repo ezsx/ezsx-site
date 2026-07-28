@@ -1,0 +1,76 @@
+.systems-section {
+  padding-bottom: 128px;
+}
+
+.systems-list {
+  margin: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.system-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.42fr) 1.58fr;
+  gap: 28px;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+
+.systems-list dt {
+  color: var(--foreground);
+  font-size: 13px;
+}
+
+.systems-list dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+.contact-section {
+  padding: 112px 0 124px;
+  border-top: 1px solid var(--line);
+}
+
+.contact-section h2 {
+  max-width: 700px;
+  margin: 0 0 24px;
+  font-size: clamp(38px, 5vw, 62px);
+  font-weight: 470;
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+}
+
+.contact-section > p:not(.eyebrow) {
+  margin: 0;
+  color: var(--muted);
+  font-size: 19px;
+}
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 34px;
+  margin-top: 42px;
+  font-family: var(--mono);
+  font-size: 14px;
+}
+
+.contact-links a {
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 7px;
+  transition: text-decoration-color 120ms ease;
+}
+
+.contact-links a:hover {
+  text-decoration-color: var(--accent);
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 0 44px;
+  border-top: 1px solid var(--line-soft);
+  color: var(--quiet);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}

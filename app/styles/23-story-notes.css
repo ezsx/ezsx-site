@@ -1,0 +1,27 @@
+.story-notes {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 34px;
+  padding: 21px 26px 23px;
+  border-top: 1px solid var(--line);
+}
+
+.story-notes p {
+  margin: 0;
+  color: var(--quiet);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.58;
+}
+
+.story-notes a {
+  color: var(--muted);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+}
+
+.story-notes a:hover {
+  color: var(--foreground);
+  text-decoration-color: var(--accent);
+}

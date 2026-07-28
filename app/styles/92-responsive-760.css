@@ -1,0 +1,62 @@
+@media (max-width: 760px) {
+  .site-shell {
+    width: min(calc(100% - 32px), var(--max-width));
+  }
+
+  .site-header {
+    min-height: 76px;
+  }
+
+  .site-header nav {
+    gap: 16px;
+  }
+
+  .site-header nav > a:nth-child(2),
+  .site-header nav > a:nth-child(3) {
+    display: none;
+  }
+
+  .hero {
+    min-height: 620px;
+    padding-top: 108px;
+  }
+
+  .hero-copy {
+    margin-top: 34px;
+  }
+
+  .route {
+    right: -20px;
+    bottom: 68px;
+    width: 76%;
+  }
+
+  .section {
+    padding: 84px 0 96px;
+  }
+
+  .work-item {
+    grid-template-columns: 36px 1fr;
+    gap: 10px 14px;
+    padding: 28px 0;
+  }
+
+  .work-item:hover {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .work-description {
+    grid-column: 2;
+  }
+
+  .system-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .contact-section {
+    padding: 88px 0 96px;
+  }
+
+}

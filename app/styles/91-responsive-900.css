@@ -1,0 +1,74 @@
+@media (max-width: 900px) {
+  .project-story-intro {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .project-story-intro > div:last-child {
+    max-width: 760px;
+  }
+
+  .story-steps {
+    grid-template-columns: repeat(
+      var(--story-stage-count),
+      minmax(180px, 1fr)
+    );
+    overflow-x: auto;
+  }
+
+  .story-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .story-stage-copy {
+    max-width: 720px;
+  }
+
+  .story-stage-visual {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .profile-body {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-topology {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .profile-conclusion {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .trace-axis {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .trace-axis li {
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .trace-axis li:nth-child(4n) {
+    border-right: 0;
+  }
+
+  .trace-axis li:nth-last-child(-n + 4) {
+    border-bottom: 0;
+  }
+
+  .vpn-technical-body {
+    grid-template-columns: 1fr;
+  }
+
+  .vpn-architecture-map {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .vpn-queue-decision {
+    grid-column: auto;
+  }
+}

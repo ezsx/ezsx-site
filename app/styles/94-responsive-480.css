@@ -1,0 +1,77 @@
+@media (max-width: 480px) {
+  .site-header nav > a:first-child {
+    display: none;
+  }
+
+  .hero {
+    min-height: 570px;
+  }
+
+  .hero h1 {
+    font-size: 70px;
+  }
+
+  .hero-copy {
+    font-size: 22px;
+  }
+
+  .focus-list {
+    max-width: 270px;
+  }
+
+  .section-heading {
+    margin-bottom: 34px;
+  }
+
+  .section-heading span {
+    display: none;
+  }
+
+  .story-disclosure {
+    gap: 12px;
+  }
+
+  .story-disclosure .disclosure-cue > span {
+    display: none;
+  }
+
+  .work-item {
+    grid-template-columns: 28px 1fr;
+  }
+
+  .project-story-intro h3 {
+    font-size: 34px;
+  }
+
+  .story-headlines {
+    grid-template-columns: 1fr;
+  }
+
+  .story-headlines > div:not(:last-child) {
+    border-right: 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .story-proof {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .story-proof small {
+    text-align: left;
+  }
+
+  .vpn-fleet-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-section > p:not(.eyebrow) {
+    font-size: 16px;
+  }
+
+  footer span:last-child {
+    display: none;
+  }
+}

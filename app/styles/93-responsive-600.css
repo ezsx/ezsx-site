@@ -1,0 +1,509 @@
+@media (max-width: 600px) {
+  .seedforge-story {
+    margin-top: 92px;
+  }
+
+  .project-story-intro h3 {
+    font-size: 36px;
+  }
+
+  .project-story-intro > div:last-child p {
+    font-size: 17px;
+  }
+
+  .story-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .story-disclosure {
+    width: 100%;
+  }
+
+  .story-control {
+    width: 100%;
+  }
+
+  .story-steps {
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  .story-steps li:not(:last-child) {
+    border-right: 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .story-steps button {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 8px;
+    min-height: 70px;
+    align-items: center;
+    padding: 13px 12px;
+  }
+
+  .story-steps button::before {
+    right: auto;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+  }
+
+  .story-steps button > span,
+  .story-steps button > small {
+    margin: 0;
+  }
+
+  .story-stage-copy {
+    padding: 30px 24px 34px;
+  }
+
+  .story-stage-copy h4 {
+    font-size: 31px;
+  }
+
+  .story-stage-summary {
+    font-size: 18px;
+  }
+
+  .story-stage-visual {
+    padding: 18px;
+  }
+
+  .story-scene {
+    min-height: 0;
+    padding: 20px;
+  }
+
+  .runtime-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .runtime-flow .scene-arrow {
+    transform: rotate(90deg);
+    text-align: center;
+  }
+
+  .runtime-checks > div {
+    grid-template-columns: 1fr auto;
+  }
+
+  .runtime-checks > div strong {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+
+  .proof-scene {
+    grid-template-columns: 1fr;
+  }
+
+  .canonical-gate {
+    min-height: 130px;
+  }
+
+  .biome-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .gpu-workers {
+    grid-template-columns: 1fr;
+  }
+
+  .scheduler-node {
+    padding: 12px;
+  }
+
+  .recovery-line {
+    grid-template-columns: 1fr auto;
+  }
+
+  .recovery-line strong {
+    grid-column: 1 / -1;
+  }
+
+  .census-range > div:first-child {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .evidence-results {
+    grid-template-columns: 1fr;
+  }
+
+  .evidence-results > div:not(:last-child) {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .story-headlines {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .story-proof {
+    grid-template-columns: 1fr auto;
+  }
+
+  .story-proof span {
+    grid-column: 1 / -1;
+  }
+
+  .story-headlines > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .story-headlines > div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .technical-disclosure summary {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .technical-summary-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+  }
+
+  .technical-disclosure-meta {
+    text-align: left;
+  }
+
+  .profile-topology,
+  .profile-pipelines {
+    padding: 25px 20px;
+  }
+
+  .technical-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .topology-chain {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .topology-chain > i {
+    display: none;
+  }
+
+  .topology-chain span,
+  .topology-chain small {
+    font-size: 11px;
+  }
+
+  .topology-chain strong {
+    font-size: 12px;
+  }
+
+  .sm-caption {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .sm-pipelines-heading,
+  .sm-workload-note {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .sm-pipelines-heading strong,
+  .sm-workload-note span {
+    text-align: left;
+  }
+
+  .sm-pipeline-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sm-pipeline-grid > div:nth-child(3n) {
+    border-right: 1px solid var(--line-soft);
+  }
+
+  .sm-pipeline-grid > div:nth-last-child(-n + 3) {
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .sm-pipeline-grid > div:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .sm-pipeline-grid > div:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .stall-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .stall-metrics > div:first-child {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .profile-conclusion {
+    padding: 24px 20px;
+  }
+
+  .trace-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 20px;
+  }
+
+  .trace-toolbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .trace-axis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .trace-axis li:nth-child(4n) {
+    border-right: 1px solid var(--line-soft);
+  }
+
+  .trace-axis li:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .trace-axis li:nth-last-child(-n + 4) {
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .trace-axis li:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .trace-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .trace-gate {
+    align-items: flex-start;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+    text-align: left;
+  }
+
+  .trace-caveat {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .story-notes {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .vpn-story {
+    margin-top: 112px;
+  }
+
+  .vpn-request-flow {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .vpn-flow-link {
+    width: 1px;
+    height: 18px;
+    margin: 0 auto;
+  }
+
+  .vpn-flow-link::after {
+    top: auto;
+    right: -2px;
+    bottom: 0;
+    border-top: 4px solid var(--accent);
+    border-right: 2.5px solid transparent;
+    border-bottom: 0;
+    border-left: 2.5px solid transparent;
+  }
+
+  .vpn-flow-link b {
+    top: -8px;
+    left: -1px;
+    width: 3px;
+    height: 8px;
+    animation-name: vpn-packet-travel-vertical;
+  }
+
+  .vpn-contract-card > div:first-child,
+  .vpn-scene-result {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .vpn-contract-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vpn-scene-result strong {
+    text-align: left;
+  }
+
+  .vpn-dedupe-path {
+    grid-template-columns: 1fr;
+  }
+
+  .vpn-dedupe-path > i {
+    transform: rotate(90deg);
+    text-align: center;
+  }
+
+  .vpn-jobq-map,
+  .vpn-allocate-scene,
+  .vpn-fleet-scene {
+    grid-template-columns: 1fr;
+  }
+
+  .vpn-worker-claim {
+    min-height: 130px;
+  }
+
+  .vpn-state-transition {
+    grid-template-columns: auto auto auto;
+  }
+
+  .vpn-state-transition small {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+
+  .vpn-caretaker {
+    min-height: 280px;
+  }
+
+  .vpn-recovery-track {
+    grid-template-columns: 1fr;
+  }
+
+  .vpn-recovery-track > i {
+    transform: rotate(90deg);
+    text-align: center;
+  }
+
+  .vpn-convergence-map {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .vpn-convergence-line {
+    width: 1px;
+    height: 18px;
+    margin: 0 auto;
+  }
+
+  .vpn-convergence-line b {
+    top: -8px;
+    left: -1px;
+    width: 3px;
+    height: 8px;
+    animation-name: vpn-converge-vertical;
+  }
+
+  .vpn-architecture-map,
+  .vpn-queue-anatomy {
+    padding: 25px 20px;
+  }
+
+  .vpn-plane-row {
+    grid-template-columns: 1fr;
+  }
+
+  .vpn-plane-row > i {
+    transform: rotate(90deg);
+    text-align: center;
+  }
+
+  .vpn-worker-split {
+    grid-template-columns: 1fr;
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .vpn-worker-rail {
+    width: 100%;
+    height: 28px;
+  }
+
+  .vpn-worker-rail::before {
+    top: 50%;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    width: auto;
+    height: 1px;
+  }
+
+  .vpn-worker-rail i,
+  .vpn-worker-rail b {
+    top: calc(50% - 3px);
+    left: auto;
+  }
+
+  .vpn-worker-rail i:first-child {
+    top: calc(50% - 3px);
+    left: 4px;
+  }
+
+  .vpn-worker-rail i:last-child {
+    right: 4px;
+    bottom: auto;
+  }
+
+  .vpn-worker-rail b {
+    left: calc(50% - 3px);
+  }
+
+  .vpn-data-plane > div {
+    grid-template-columns: auto auto;
+  }
+
+  .vpn-data-plane small {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+
+  .vpn-job-lifecycle {
+    grid-template-columns: 1fr;
+  }
+
+  .vpn-job-lifecycle li::after {
+    display: none;
+  }
+
+  .vpn-queue-wakeup {
+    grid-template-columns: 1fr;
+  }
+
+  .vpn-queue-wakeup > i {
+    text-align: center;
+  }
+
+  .vpn-queue-decision {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 28px 20px;
+  }
+
+  .vpn-broker-comparison {
+    grid-template-columns: 1fr;
+  }
+}

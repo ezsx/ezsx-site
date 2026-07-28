@@ -1,0 +1,14 @@
+@media (max-width: 980px) {
+  .vpn-story .story-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .vpn-story .story-stage-copy {
+    max-width: 720px;
+  }
+
+  .vpn-story .story-stage-visual {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+}

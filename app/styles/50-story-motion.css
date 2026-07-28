@@ -1,0 +1,42 @@
+@keyframes sm-block-pulse {
+  0%,
+  100% {
+    background: var(--line-soft);
+  }
+  48% {
+    background: var(--accent);
+  }
+}
+
+@keyframes trace-status-pulse {
+  50% {
+    opacity: 0.45;
+    transform: scale(0.78);
+  }
+}
+
+@keyframes story-stage-in {
+  from {
+    opacity: 0.45;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes work-cell-pulse {
+  50% {
+    background: var(--accent);
+  }
+}
+
+@keyframes census-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}

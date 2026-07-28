@@ -1,0 +1,88 @@
+@keyframes vpn-packet-travel {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  18% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+}
+
+@keyframes vpn-lease-heartbeat {
+  0%,
+  100% {
+    width: 38%;
+  }
+  50% {
+    width: 100%;
+  }
+}
+
+@keyframes vpn-slot-claim {
+  from {
+    opacity: 0.58;
+    transform: translateX(-7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes vpn-caretaker-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes vpn-free-slot {
+  0%,
+  100% {
+    background: var(--accent-soft);
+  }
+  50% {
+    background: var(--accent);
+  }
+}
+
+@keyframes vpn-converge {
+  from {
+    left: -8px;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes vpn-packet-travel-vertical {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  18% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+@keyframes vpn-converge-vertical {
+  from {
+    top: -8px;
+  }
+  to {
+    top: 100%;
+  }
+}

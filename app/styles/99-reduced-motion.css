@@ -1,0 +1,29 @@
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+
+  .story-stage,
+  .work-ledger i.is-active,
+  .census-progress span,
+  .sm-grid.is-playing > span.is-cohort > i,
+  .cuda-trace.is-playing .trace-status > i,
+  .vpn-flow-link b,
+  .vpn-worker-claim > i b,
+  .vpn-slot-candidates > div.is-picked,
+  .vpn-caretaker-ring::after,
+  .vpn-fleet-grid > div.is-refill i.is-free,
+  .vpn-convergence-line b {
+    animation: none;
+  }
+
+  .story-status-dot {
+    box-shadow: none;
+  }
+}

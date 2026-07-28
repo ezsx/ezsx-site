@@ -1,0 +1,123 @@
+import type { Locale } from "../../content/locales";
+
+export const seedforgeTechnicalCopy = {
+  en: {
+    eyebrow: "technical layer / profiler",
+    title: "Inspect the CUDA worker",
+    expand: "expand profiler",
+    collapse: "collapse profiler",
+    meta: "V100 · 80 SM · 960 × 64 · 3.08 / 32 lanes",
+    hierarchy: "launch hierarchy",
+    snapshot: "P6 diagnostic snapshot",
+    blocks: "blocks",
+    waves: "waves",
+    threads: "threads",
+    warps: "warps",
+    activeLanes: "active lanes",
+    pipelines: "instruction pipelines",
+    pipelinePeak: "P6 whole kernel · % active-cycle peak",
+    pipelineDetails: {
+      alu: "indices · bitwise · counters",
+      fma: "includes FP32 math",
+      lsu: "arena · maps · bitsets",
+      cbu: "gates · branches · retry",
+      xu: "special-function path",
+      fp64: "parity-sensitive RNG",
+    },
+    counterNote:
+      "Source-informed phase highlight; measured values remain whole-kernel. These independent peak-utilization counters do not sum to 100%. FMA is not a pure FP32 counter. FP16, Tensor and TEX were 0% in this snapshot.",
+    workload: "mixed irregular workload",
+    workloadDetail:
+      "INT / memory / control dominate; FP64 is a narrow game-parity path, not the bottleneck.",
+    finalLaunch: "final P7 launch",
+    finalLaunchConfig: "1440 blocks × 64 · 3 waves · span 8",
+    counterHistory: "The counters shown here predate that final kernel.",
+    pipelineLoad: "pipeline / load",
+    metricLabels: {
+      compute: "Compute SOL",
+      dram: "DRAM SOL",
+      issue: "Issue slots busy",
+      occupancy: "Achieved occupancy",
+    },
+    memoryWaits: "dependent memory waits",
+    memoryWaitShare: "long_scoreboard sample share",
+    queuePressure: "instruction queue pressure",
+    queuePressureShare: "lg_throttle sample share",
+    smAria: "SM residency and representative stage",
+    smCaption: "80 SM × up to 6 resident blocks · P6 register limit",
+    representative: "representative cohort · not per-SM telemetry",
+    blockStage: "representative block stage",
+    everySm: "Every SM can execute every stage.",
+    profilerReading: "profiler reading",
+    reading: "Sparse, divergent and latency / issue limited.",
+    conclusion:
+      "Peak compute and DRAM remain mostly idle. A historical P3 differential isolated pathfinding plus retry at 83.8%; the P6 counters above profile the whole kernel, and neither number is final-P7 stage-time attribution. Dependent memory work, queue pressure and only 3–4 active lanes still show meaningful headroom.",
+    capacityNote:
+      "* 59.5k V100 + 75.7k RTX 5060 Ti, measured independently on the coalmine workload before orchestration overhead.",
+    upstreamPrefix: "Seedforge extends the",
+    upstreamLabel: "upstream NoitaSeedSearcherCUDA engine",
+    upstreamSuffix:
+      "Telescope parity is a sampled independent cross-check; documented residuals are not presented as exhaustive game parity.",
+  },
+  ru: {
+    eyebrow: "технический слой / профилировщик",
+    title: "Посмотреть устройство CUDA-воркера",
+    expand: "развернуть профилировщик",
+    collapse: "свернуть профилировщик",
+    meta: "V100 · 80 SM · 960 × 64 · 3,08 / 32 lanes",
+    hierarchy: "иерархия запуска",
+    snapshot: "диагностический снимок P6",
+    blocks: "блоков",
+    waves: "волны",
+    threads: "потоков",
+    warps: "варпа",
+    activeLanes: "активных lanes",
+    pipelines: "вычислительные конвейеры",
+    pipelinePeak: "всё ядро P6 · % пика активного цикла",
+    pipelineDetails: {
+      alu: "индексы · битовые операции · счётчики",
+      fma: "включает математику FP32",
+      lsu: "арена · карты · bitset",
+      cbu: "условия · ветвления · повторы",
+      xu: "путь специальных функций",
+      fp64: "RNG с чувствительностью к паритету",
+    },
+    counterNote:
+      "Подсветка фазы основана на исходном коде; измеренные значения относятся ко всему ядру. Эти независимые счётчики пиковой загрузки не складываются в 100%. FMA не является чистым счётчиком FP32. FP16, Tensor и TEX в этом снимке равны 0%.",
+    workload: "смешанная нерегулярная нагрузка",
+    workloadDetail:
+      "Доминируют INT, память и управление; FP64 — узкий путь игрового паритета, а не узкое место.",
+    finalLaunch: "финальный запуск P7",
+    finalLaunchConfig: "1440 блоков × 64 · 3 волны · span 8",
+    counterHistory: "Показанные счётчики были сняты до финального ядра.",
+    pipelineLoad: "конвейер / нагрузка",
+    metricLabels: {
+      compute: "Compute SOL",
+      dram: "DRAM SOL",
+      issue: "Занятость issue slots",
+      occupancy: "Достигнутая occupancy",
+    },
+    memoryWaits: "зависимые ожидания памяти",
+    memoryWaitShare: "доля выборок long_scoreboard",
+    queuePressure: "давление очереди инструкций",
+    queuePressureShare: "доля выборок lg_throttle",
+    smAria: "Резидентность SM и репрезентативная стадия",
+    smCaption: "80 SM × до 6 резидентных блоков · лимит регистров P6",
+    representative: "репрезентативная группа · не телеметрия каждого SM",
+    blockStage: "репрезентативная стадия блока",
+    everySm: "Каждый SM способен выполнить каждую стадию.",
+    profilerReading: "вывод профилировщика",
+    reading: "Разреженная, дивергентная и ограниченная задержками / issue.",
+    conclusion:
+      "Пиковые compute и DRAM в основном простаивают. Историческое сравнение P3 выделило pathfinding вместе с retry на уровне 83,8%; счётчики P6 выше относятся ко всему ядру, и ни одно из этих значений не является распределением времени по стадиям финального P7. Зависимая работа с памятью, давление очереди и лишь 3–4 активных lane по-прежнему оставляют заметный резерв.",
+    capacityNote:
+      "* 59.5k на V100 + 75.7k на RTX 5060 Ti, независимо измеренные на нагрузке coalmine до накладных расходов оркестрации.",
+    upstreamPrefix: "Seedforge расширяет",
+    upstreamLabel: "исходный движок NoitaSeedSearcherCUDA",
+    upstreamSuffix:
+      "Паритет с Telescope проверяется независимой выборкой; документированные расхождения не выдаются за исчерпывающий паритет с игрой.",
+  },
+} as const;
+
+export type SeedforgeTechnicalCopy =
+  (typeof seedforgeTechnicalCopy)[Locale];
