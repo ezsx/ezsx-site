@@ -36,6 +36,10 @@ test("server-renders the ezsx index", async () => {
   assert.match(html, /repo-semantic-mcp/);
   assert.match(html, /rag_app/);
   assert.match(html, /seedforge/);
+  assert.match(html, /CUDA search microscope/);
+  assert.match(html, /3\.08 \/ 32/);
+  assert.match(html, /20\.9k → 59\.5k seed\/s/);
+  assert.match(html, /Representative execution trace/);
   assert.match(html, /scdcor@gmail\.com/);
   assert.match(html, /rel="canonical" href="https:\/\/ezsx\.xx\.kg\/"/);
   assert.match(html, /https:\/\/ezsx\.xx\.kg\/og\.png/);

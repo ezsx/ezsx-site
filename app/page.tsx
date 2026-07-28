@@ -1,3 +1,5 @@
+import SeedforgeKernel from "./seedforge-kernel";
+
 const work = [
   {
     number: "01",
@@ -159,6 +161,8 @@ export default function Home() {
                 </article>
               ))}
             </div>
+
+            <SeedforgeKernel />
           </section>
 
           <section
