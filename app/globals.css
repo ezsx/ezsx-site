@@ -1889,12 +1889,37 @@ footer {
 
 .trace-canvas-host {
   position: relative;
+  min-width: 0;
   width: 100%;
   background-image:
     linear-gradient(var(--line-soft) 1px, transparent 1px),
     linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
   background-position: -1px -1px;
   background-size: 32px 32px;
+}
+
+.trace-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+}
+
+.trace-main {
+  min-width: 0;
+}
+
+.trace-sm-panel {
+  display: flex;
+  min-width: 0;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: center;
+  padding: 22px 20px;
+  border-left: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.trace-sm-panel .sm-grid {
+  margin-top: 0;
 }
 
 .trace-canvas-host::after {
@@ -2327,6 +2352,21 @@ footer {
 
   .contact-section {
     padding: 88px 0 96px;
+  }
+
+  .trace-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .trace-sm-panel {
+    grid-row: 1;
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .trace-main {
+    grid-row: 2;
   }
 }
 
