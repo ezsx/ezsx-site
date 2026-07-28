@@ -2,581 +2,626 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type ModeId = "baseline" | "p6" | "p7";
+type StageId = "run" | "prove" | "cover" | "orchestrate" | "publish";
 
-type Mode = {
-  id: ModeId;
+type StoryStage = {
+  id: StageId;
+  number: string;
   tab: string;
+  result: string;
   title: string;
-  stage: string;
-  metric: string;
-  metricLabel: string;
+  summary: string;
   detail: string;
+  tags: string[];
 };
 
-const modes: Mode[] = [
+const storyStages: StoryStage[] = [
   {
-    id: "baseline",
-    tab: "baseline",
-    title: "RGB predicates",
-    stage: "room RGB scan",
-    metric: "20.9k",
-    metricLabel: "seed/s · initial V100",
+    id: "run",
+    number: "01",
+    tab: "make it run",
+    result: "accepted CUDA run",
+    title: "A result-producing CUDA path",
+    summary:
+      "Build and runtime failures had to be solved before search performance mattered.",
     detail:
-      "Room pixels and path predicates are resolved from hot RGB tile reads.",
+      "Native CUDA builds load Noita data, verify the selected device and stream structured progress and hits through a hardened bridge. A failed launch or an empty run is not accepted as work.",
+    tags: ["native sm_70 + sm_120", "WAK identity", "structured hit stream"],
   },
   {
-    id: "p6",
-    tab: "P6",
-    title: "tile metadata",
-    stage: "tile metadata",
-    metric: "+116.15%",
-    metricLabel: "coalmine · vs pre-P6",
+    id: "prove",
+    number: "02",
+    tab: "prove it",
+    result: "canonical equality",
+    title: "Correctness before speed",
+    summary:
+      "CPU, V100 and RTX output must converge to the same canonical seed blocks.",
     detail:
-      "Host-precomputed flags skip tiles that cannot contain room colors.",
+      "Whole per-seed blocks preserve duplicates and record order. SHA-256 gates and sampled Telescope comparisons make drift and known residuals visible instead of hiding them behind equal result counts.",
+    tags: ["seed-block-v2", "CPU = GPU", "916 comparison cases"],
   },
   {
-    id: "p7",
-    tab: "P7 final",
-    title: "metadata + bitmap",
-    stage: "meta + bit planes",
-    metric: "59.5k",
-    metricLabel: "seed/s · final V100",
+    id: "cover",
+    number: "03",
+    tab: "cover the world",
+    result: "22 target biomes",
+    title: "World coverage, not one map",
+    summary:
+      "The engine reconstructs Wang worldgen and spawn hooks across all 22 audited target biomes.",
     detail:
-      "The P6 skip remains; immutable bit planes replace hot RGB reads without changing canonical output.",
+      "Production Path A generates the 16 biomes that can create chests while retaining boundary hits in six source-empty targets. Rare boundary and wand residuals remain explicitly documented.",
+    tags: ["16 productive sources", "22 accepted targets", "named residuals"],
+  },
+  {
+    id: "orchestrate",
+    number: "04",
+    tab: "split + recover",
+    result: "V100 + RTX",
+    title: "One range, two unequal GPUs",
+    summary:
+      "The scheduler assigns disjoint durable cells by measured biome throughput.",
+    detail:
+      "Workers are pinned by UUID and fingerprinted against the CUDA image and game data. Finished cells remain immutable; interrupted work returns to the queue, and finalization rejects gaps or overlaps.",
+    tags: ["capacity-weighted", "433 / 433 cells", "checkpoint + resume"],
+  },
+  {
+    id: "publish",
+    number: "05",
+    tab: "prove the result",
+    result: "reproducible census",
+    title: "A research artifact, not a screenshot",
+    summary:
+      "Canonical streams become a queryable catalog, leaderboards and hash-pinned evidence.",
+    detail:
+      "The complete coalmine census covers the supported seed range and preserves result provenance. A separate dual-GPU ROI12 run completed every planned cell with zero missing or invalid work.",
+    tags: ["SQLite + leaderboard", "SHA-256 evidence", "zero missing cells"],
   },
 ];
 
-const phaseLabels = [
-  "dispatching an 8-seed span",
-  "running ordered prechecks",
-  "assembling Wang tiles",
-  "walking a divergent path",
-  "feeding the object filter",
-  "canonical output verified",
+const biomes = [
+  { label: "coal", source: true },
+  { label: "coal alt", source: true },
+  { label: "excav", source: true },
+  { label: "snow cave", source: true },
+  { label: "castle", source: true },
+  { label: "rain", source: true },
+  { label: "rain open", source: true },
+  { label: "vault", source: true },
+  { label: "crypt", source: true },
+  { label: "fungi cave", source: true },
+  { label: "fungi", source: true },
+  { label: "rain dark", source: true },
+  { label: "liquid", source: false },
+  { label: "wand", source: false },
+  { label: "the end", source: false },
+  { label: "the sky", source: false },
+  { label: "wizard", source: true },
+  { label: "sand", source: false },
+  { label: "pyramid", source: false },
+  { label: "robobase", source: true },
+  { label: "frozen", source: true },
+  { label: "meat", source: true },
 ];
 
-type Palette = {
-  accent: string;
-  foreground: string;
-  muted: string;
-  quiet: string;
-  line: string;
-  lineSoft: string;
-  surface: string;
-};
+const profileMetrics = [
+  { label: "Compute SOL", value: 17.41, display: "17.41%" },
+  { label: "DRAM SOL", value: 8, display: "8.00%" },
+  { label: "Issue slots busy", value: 20.39, display: "20.39%" },
+  { label: "Achieved occupancy", value: 14.66, display: "14.66%" },
+];
 
-type TraceSize = {
-  width: number;
-  height: number;
-  dpr: number;
-};
-
-function clamp(value: number, min = 0, max = 1) {
-  return Math.min(max, Math.max(min, value));
-}
-
-function ease(value: number) {
-  const x = clamp(value);
-  return 1 - (1 - x) ** 3;
-}
-
-function phaseFromProgress(progress: number) {
-  if (progress < 0.14) return 0;
-  if (progress < 0.3) return 1;
-  if (progress < 0.47) return 2;
-  if (progress < 0.81) return 3;
-  if (progress < 0.94) return 4;
-  return 5;
-}
-
-function cssColor(name: string, fallback: string) {
+function RuntimeScene() {
   return (
-    getComputedStyle(document.documentElement).getPropertyValue(name).trim() ||
-    fallback
+    <div className="story-scene runtime-scene">
+      <div className="runtime-flow">
+        <div className="scene-node">
+          <span>source</span>
+          <strong>CUDA engine</strong>
+        </div>
+        <span className="scene-arrow" aria-hidden="true">
+          →
+        </span>
+        <div className="scene-node">
+          <span>runtime</span>
+          <strong>native build</strong>
+        </div>
+        <span className="scene-arrow" aria-hidden="true">
+          →
+        </span>
+        <div className="scene-node">
+          <span>contract</span>
+          <strong>result stream</strong>
+        </div>
+      </div>
+
+      <div className="runtime-checks">
+        <div>
+          <span>device identity</span>
+          <strong>V100 · sm_70</strong>
+          <b>PASS</b>
+        </div>
+        <div>
+          <span>game data</span>
+          <strong>data.wak · SHA-256</strong>
+          <b>PASS</b>
+        </div>
+        <div>
+          <span>first accepted output</span>
+          <strong>progress → hit → done</strong>
+          <b>LIVE</b>
+        </div>
+      </div>
+    </div>
   );
 }
 
-function readPalette(): Palette {
-  return {
-    accent: cssColor("--accent", "#58a6ff"),
-    foreground: cssColor("--foreground", "#f0f6fc"),
-    muted: cssColor("--muted", "#8b949e"),
-    quiet: cssColor("--quiet", "#6e7681"),
-    line: cssColor("--line", "#30363d"),
-    lineSoft: cssColor("--line-soft", "#21262d"),
-    surface: cssColor("--surface", "#161b22"),
-  };
-}
+function ProofScene() {
+  return (
+    <div className="story-scene proof-scene">
+      <div className="byte-streams">
+        {["CPU", "V100", "RTX"].map((worker) => (
+          <div className="byte-stream" key={worker}>
+            <strong>{worker}</strong>
+            <div aria-hidden="true">
+              {Array.from({ length: 12 }, (_, index) => (
+                <span
+                  className={index % 5 === 0 ? "is-marked" : ""}
+                  key={index}
+                />
+              ))}
+            </div>
+            <small>same seed block</small>
+          </div>
+        ))}
+      </div>
 
-function activeLanes(bucket: number) {
-  const first = (bucket * 7 + 2) % 32;
-  const lanes = new Set<number>([
-    first,
-    (first + 9 + (bucket % 3)) % 32,
-    (first + 19 + ((bucket * 2) % 5)) % 32,
-  ]);
-  if (bucket % 3 === 1) lanes.add((first + 27) % 32);
-  return lanes;
-}
-
-function drawTrace(
-  canvas: HTMLCanvasElement,
-  size: TraceSize,
-  mode: ModeId,
-  progress: number,
-  palette: Palette,
-) {
-  const context = canvas.getContext("2d");
-  if (!context) return;
-
-  const { width, height, dpr } = size;
-  context.setTransform(dpr, 0, 0, dpr, 0, 0);
-  context.clearRect(0, 0, width, height);
-
-  const x0 = width * 0.055;
-  const x1 = width * 0.205;
-  const x2 = width * 0.39;
-  const x3 = width * 0.515;
-  const x4 = width * 0.815;
-  const x5 = width * 0.945;
-  const top = 34;
-  const bottom = height - 30;
-  const laneGap = (bottom - top) / 31;
-  const compact = width < 560;
-
-  context.fillStyle = palette.surface;
-  context.globalAlpha = 0.28;
-  context.fillRect(x2, 16, x3 - x2, height - 32);
-  context.globalAlpha = 1;
-
-  context.save();
-  context.strokeStyle = palette.line;
-  context.lineWidth = 1;
-  context.setLineDash([2, 5]);
-  for (const x of [x1, x2, x3, x4, x5]) {
-    context.beginPath();
-    context.moveTo(x, 16);
-    context.lineTo(x, height - 16);
-    context.stroke();
-  }
-  context.restore();
-
-  const bucket = Math.floor(clamp((progress - 0.47) / 0.34) * 13);
-  const live = activeLanes(bucket);
-  const pathProgress = ease((progress - 0.47) / 0.34);
-  const tokenStages = [
-    { from: 0, to: 0.14, xFrom: x0, xTo: x1 },
-    { from: 0.14, to: 0.3, xFrom: x1, xTo: x2 },
-    { from: 0.3, to: 0.47, xFrom: x2, xTo: x3 },
-    { from: 0.47, to: 0.81, xFrom: x3, xTo: x4 },
-    { from: 0.81, to: 0.94, xFrom: x4, xTo: x5 },
-  ];
-  const tokenStage =
-    tokenStages.find((stage) => progress <= stage.to) ??
-    tokenStages[tokenStages.length - 1];
-  const tokenStageProgress = ease(
-    (progress - tokenStage.from) / (tokenStage.to - tokenStage.from),
+      <div className="canonical-gate">
+        <span>canonical bytes · duplicate + order preserving</span>
+        <strong>SHA-256 MATCH</strong>
+      </div>
+    </div>
   );
-  const tokenX =
-    tokenStage.xFrom +
-    (tokenStage.xTo - tokenStage.xFrom) * tokenStageProgress;
-  const candidateLane = [...activeLanes(13)][0];
+}
 
-  for (let lane = 0; lane < 32; lane += 1) {
-    const y = top + lane * laneGap;
+function CoverageScene() {
+  return (
+    <div className="story-scene coverage-scene">
+      <div className="biome-grid" aria-hidden="true">
+        {biomes.map((biome) => (
+          <span className={biome.source ? "is-source" : "is-boundary"} key={biome.label}>
+            {biome.label}
+          </span>
+        ))}
+      </div>
 
-    context.strokeStyle = palette.lineSoft;
-    context.globalAlpha = lane % 8 === 0 ? 0.9 : 0.55;
-    context.lineWidth = lane % 8 === 0 ? 1 : 0.75;
-    context.beginPath();
-    context.moveTo(x0, y);
-    context.lineTo(x5, y);
-    context.stroke();
+      <div className="coverage-legend">
+        <span>
+          <i className="legend-source" aria-hidden="true" />
+          <strong>16</strong> productive source biomes
+        </span>
+        <span>
+          <i className="legend-boundary" aria-hidden="true" />
+          <strong>6</strong> boundary-only targets retained
+        </span>
+      </div>
 
-    if (!compact && lane % 8 === 0) {
-      context.globalAlpha = 0.8;
-      context.fillStyle = palette.quiet;
-      context.font = "9px ui-monospace, monospace";
-      context.textAlign = "left";
-      context.fillText(String(lane).padStart(2, "0"), 2, y + 3);
-    }
+      <div className="coverage-gate">
+        <span>sampled independent cross-check</span>
+        <strong>916 CUDA ↔ Telescope cases</strong>
+        <small>known residuals remain named in the evidence</small>
+      </div>
+    </div>
+  );
+}
 
-    const seedWidth = Math.max(1.5, Math.min(3.5, (x1 - x0 - 12) / 10));
-    const seedGap = seedWidth + 1.5;
-    const activeSeed = (lane * 5 + 3) % 8;
-    for (let seed = 0; seed < 8; seed += 1) {
-      context.globalAlpha = seed === activeSeed ? 0.78 : 0.18;
-      context.fillStyle =
-        seed === activeSeed ? palette.accent : palette.foreground;
-      context.fillRect(x0 + 5 + seed * seedGap, y - 1, seedWidth, 2);
-    }
+function OrchestrationScene() {
+  const workCells = Array.from({ length: 14 }, (_, index) => index);
 
-    if (mode === "baseline") {
-      const cell = Math.max(1.4, laneGap * 0.25);
-      for (let bit = 0; bit < 3; bit += 1) {
-        context.globalAlpha = 0.2 + bit * 0.13;
-        context.fillStyle =
-          bit === 1 ? palette.accent : palette.foreground;
-        context.fillRect(
-          x2 + 7 + bit * (cell + 2),
-          y - cell / 2,
-          cell,
-          cell,
-        );
-      }
-    } else if (mode === "p6") {
-      const skipped = (lane * 7 + 3) % 5 !== 0;
-      context.globalAlpha = skipped ? 0.25 : 0.75;
-      context.strokeStyle = skipped ? palette.quiet : palette.accent;
-      context.strokeRect(x2 + 9, y - 2.2, 4.4, 4.4);
-      if (skipped) {
-        context.beginPath();
-        context.moveTo(x2 + 8.5, y + 2.7);
-        context.lineTo(x2 + 14, y - 2.7);
-        context.stroke();
-      }
-    } else {
-      for (let plane = 0; plane < 2; plane += 1) {
-        const on = ((lane >> plane) + lane * 3) % 4 < 2;
-        context.globalAlpha = on ? 0.75 : 0.2;
-        context.fillStyle = on ? palette.accent : palette.foreground;
-        context.fillRect(x2 + 8 + plane * 6, y - 1.7, 3.5, 3.5);
-      }
-    }
+  return (
+    <div className="story-scene orchestration-scene">
+      <div className="work-ledger">
+        <span>durable seed-range ledger</span>
+        <div aria-hidden="true">
+          {workCells.map((cell) => (
+            <i
+              className={
+                cell < 8 ? "is-complete" : cell === 8 ? "is-active" : "is-queued"
+              }
+              key={cell}
+            />
+          ))}
+        </div>
+        <small>disjoint ranges · no gaps · no overlaps</small>
+      </div>
 
-    if (progress >= 0.47) {
-      const isLive = live.has(lane);
-      context.globalAlpha = isLive ? 0.92 : 0.12;
-      context.strokeStyle = isLive ? palette.accent : palette.muted;
-      context.lineWidth = isLive ? 1.5 : 0.75;
-      context.beginPath();
-      context.moveTo(x3, y);
-      const segments = 6;
-      for (let segment = 1; segment <= segments; segment += 1) {
-        const segmentX =
-          x3 + ((x4 - x3) * segment * pathProgress) / segments;
-        const direction = (lane + segment + bucket) % 3 - 1;
-        context.lineTo(segmentX, y + direction * Math.min(2.2, laneGap * 0.28));
-      }
-      context.stroke();
-    }
+      <div className="gpu-workers">
+        <div className="gpu-worker v100-worker">
+          <div>
+            <span>worker 0</span>
+            <strong>Tesla V100</strong>
+          </div>
+          <b>80 SM · sm_70</b>
+          <p>59.5k seed/s</p>
+          <small>UUID-pinned</small>
+        </div>
 
-    const inPath = tokenX >= x3 && tokenX <= x4;
-    const tokenLive = !inPath || live.has(lane);
-    context.globalAlpha = tokenLive ? 0.78 : 0.12;
-    context.fillStyle = tokenLive ? palette.accent : palette.muted;
-    const tokenRadius = tokenLive ? 1.8 : 1.2;
-    context.beginPath();
-    context.arc(tokenX, y, tokenRadius, 0, Math.PI * 2);
-    context.fill();
+        <div className="scheduler-node">
+          <span>biome-aware</span>
+          <strong>scheduler</strong>
+          <small>capacity weighted</small>
+        </div>
 
-    if (progress > 0.86 && lane === candidateLane) {
-      const outputProgress = ease((progress - 0.86) / 0.08);
-      const outputX = x4 + (x5 - x4) * outputProgress;
-      context.globalAlpha = 0.95;
-      context.fillStyle = palette.accent;
-      context.fillRect(outputX - 2.5, y - 2.5, 5, 5);
-    }
-  }
+        <div className="gpu-worker rtx-worker">
+          <div>
+            <span>worker 1</span>
+            <strong>RTX 5060 Ti</strong>
+          </div>
+          <b>36 SM · sm_120</b>
+          <p>75.7k seed/s</p>
+          <small>UUID-pinned</small>
+        </div>
+      </div>
 
-  if (progress >= 0.94) {
-    const returnProgress = ease((progress - 0.94) / 0.06);
-    const fromY = top + candidateLane * laneGap;
-    const controlY = height - 5;
-    context.save();
-    context.globalAlpha = 0.62;
-    context.strokeStyle = palette.accent;
-    context.lineWidth = 1;
-    context.setLineDash([3, 4]);
-    context.beginPath();
-    context.moveTo(x5, fromY);
-    context.bezierCurveTo(
-      x5,
-      controlY,
-      x1,
-      controlY,
-      x1,
-      bottom,
-    );
-    context.stroke();
-    context.restore();
+      <div className="recovery-line">
+        <span>interrupted cell</span>
+        <i aria-hidden="true">↶</i>
+        <strong>fingerprint → requeue → resume</strong>
+      </div>
+    </div>
+  );
+}
 
-    const t = returnProgress;
-    const oneMinusT = 1 - t;
-    const returnX =
-      oneMinusT ** 3 * x5 +
-      3 * oneMinusT ** 2 * t * x5 +
-      3 * oneMinusT * t ** 2 * x1 +
-      t ** 3 * x1;
-    const returnY =
-      oneMinusT ** 3 * fromY +
-      3 * oneMinusT ** 2 * t * controlY +
-      3 * oneMinusT * t ** 2 * controlY +
-      t ** 3 * bottom;
-    context.globalAlpha = 0.95;
-    context.fillStyle = palette.accent;
-    context.beginPath();
-    context.arc(returnX, returnY, 2.2, 0, Math.PI * 2);
-    context.fill();
-  }
+function PublishScene() {
+  return (
+    <div className="story-scene publish-scene">
+      <div className="census-range">
+        <div>
+          <span>complete coalmine census</span>
+          <strong>1 → 2,147,483,645</strong>
+        </div>
+        <div className="census-progress" aria-hidden="true">
+          <span />
+        </div>
+        <small>100% of the supported range</small>
+      </div>
 
-  context.globalAlpha = 1;
+      <div className="evidence-results">
+        <div>
+          <strong>3,332,208</strong>
+          <span>great chests cataloged</span>
+        </div>
+        <div>
+          <strong>55 / 55</strong>
+          <span>known natural Orb seeds</span>
+        </div>
+        <div>
+          <strong>433 / 433</strong>
+          <span>accepted dual-GPU ROI12 cells</span>
+        </div>
+      </div>
+
+      <div className="artifact-row">
+        <span>canonical stream</span>
+        <span>records.sqlite3</span>
+        <span>leaderboard.csv</span>
+        <span>hash manifest</span>
+      </div>
+    </div>
+  );
+}
+
+function StageScene({ stage }: { stage: StageId }) {
+  if (stage === "run") return <RuntimeScene />;
+  if (stage === "prove") return <ProofScene />;
+  if (stage === "cover") return <CoverageScene />;
+  if (stage === "orchestrate") return <OrchestrationScene />;
+  return <PublishScene />;
 }
 
 export default function SeedforgeKernel() {
-  const [modeId, setModeId] = useState<ModeId>("p7");
-  const [phase, setPhase] = useState(0);
-  const [run, setRun] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const canvasHostRef = useRef<HTMLDivElement>(null);
-  const mode = modes.find((item) => item.id === modeId) ?? modes[2];
+  const [activeStage, setActiveStage] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [motion, setMotion] = useState<"unknown" | "full" | "reduce">("unknown");
+  const storyRef = useRef<HTMLElement>(null);
+  const hasAutoPlayed = useRef(false);
+  const stage = storyStages[activeStage];
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const host = canvasHostRef.current;
-    if (!canvas || !host) return;
-
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const colorMedia = window.matchMedia("(prefers-color-scheme: dark)");
-    let reduce = media.matches;
-    let visible = false;
-    let finished = reduce;
-    let elapsed = reduce ? 7200 : 0;
-    let lastTime = 0;
-    let frame = 0;
-    let currentProgress = reduce ? 1 : 0;
-    let palette = readPalette();
-    let size: TraceSize = { width: 0, height: 0, dpr: 1 };
+    const updateMotion = () => setMotion(media.matches ? "reduce" : "full");
+    updateMotion();
+    media.addEventListener("change", updateMotion);
+    return () => media.removeEventListener("change", updateMotion);
+  }, []);
 
-    setReducedMotion(reduce);
-    setPhase(reduce ? 5 : 0);
+  useEffect(() => {
+    const story = storyRef.current;
+    if (!story) return;
 
-    const resize = () => {
-      const width = Math.max(280, Math.floor(host.getBoundingClientRect().width));
-      const height = width < 520 ? 310 : width < 760 ? 350 : 410;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      size = { width, height, dpr };
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      palette = readPalette();
-      drawTrace(canvas, size, modeId, currentProgress, palette);
-    };
-
-    const stopFrame = () => {
-      if (frame) cancelAnimationFrame(frame);
-      frame = 0;
-      lastTime = 0;
-    };
-
-    const tick = (time: number) => {
-      frame = 0;
-      if (!visible || document.hidden || finished || reduce) return;
-      if (!lastTime) lastTime = time;
-      elapsed += Math.min(time - lastTime, 50);
-      lastTime = time;
-      currentProgress = clamp(elapsed / 7200);
-      drawTrace(canvas, size, modeId, currentProgress, palette);
-
-      const nextPhase = phaseFromProgress(currentProgress);
-      setPhase((previous) => (previous === nextPhase ? previous : nextPhase));
-
-      if (currentProgress >= 1) {
-        finished = true;
-        return;
-      }
-      frame = requestAnimationFrame(tick);
-    };
-
-    const startFrame = () => {
-      if (!frame && visible && !document.hidden && !finished && !reduce) {
-        frame = requestAnimationFrame(tick);
-      }
-    };
-
-    const onVisibility = () => {
-      if (document.hidden) stopFrame();
-      else startFrame();
-    };
-
-    const onMotionPreference = (event: MediaQueryListEvent) => {
-      reduce = event.matches;
-      setReducedMotion(reduce);
-      if (reduce) {
-        finished = true;
-        currentProgress = 1;
-        setPhase(5);
-        stopFrame();
-        drawTrace(canvas, size, modeId, currentProgress, palette);
-      } else {
-        finished = false;
-        elapsed = 0;
-        currentProgress = 0;
-        setPhase(0);
-        startFrame();
-      }
-    };
-
-    const onColorPreference = () => resize();
-
-    resize();
-    const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(host);
-
-    const intersectionObserver = new IntersectionObserver(
+    let intersecting = false;
+    const updateVisibility = () => setInView(intersecting && !document.hidden);
+    const observer = new IntersectionObserver(
       ([entry]) => {
-        visible = entry.isIntersecting;
-        if (visible) startFrame();
-        else stopFrame();
+        intersecting = entry.isIntersecting;
+        updateVisibility();
       },
-      { threshold: 0.18 },
+      { threshold: 0 },
     );
-    intersectionObserver.observe(host);
 
-    document.addEventListener("visibilitychange", onVisibility);
-    media.addEventListener("change", onMotionPreference);
-    colorMedia.addEventListener("change", onColorPreference);
-
+    observer.observe(story);
+    document.addEventListener("visibilitychange", updateVisibility);
     return () => {
-      stopFrame();
-      resizeObserver.disconnect();
-      intersectionObserver.disconnect();
-      document.removeEventListener("visibilitychange", onVisibility);
-      media.removeEventListener("change", onMotionPreference);
-      colorMedia.removeEventListener("change", onColorPreference);
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", updateVisibility);
     };
-  }, [modeId, run]);
+  }, []);
 
-  const chooseMode = (nextMode: ModeId) => {
-    setModeId(nextMode);
-    setRun((value) => value + 1);
+  useEffect(() => {
+    if (motion !== "full" || !inView || hasAutoPlayed.current) return;
+    hasAutoPlayed.current = true;
+    setActiveStage(0);
+    setPlaying(true);
+  }, [inView, motion]);
+
+  useEffect(() => {
+    if (!playing || !inView || motion !== "full") return;
+    if (activeStage === storyStages.length - 1) {
+      setPlaying(false);
+      return;
+    }
+
+    const timer = window.setTimeout(
+      () => setActiveStage((current) => current + 1),
+      3600,
+    );
+    return () => window.clearTimeout(timer);
+  }, [activeStage, inView, motion, playing]);
+
+  const selectStage = (index: number) => {
+    setActiveStage(index);
+    setPlaying(false);
   };
 
-  const replay = () => {
-    setRun((value) => value + 1);
+  const controlStory = () => {
+    if (motion === "reduce") {
+      setActiveStage((current) => (current + 1) % storyStages.length);
+      return;
+    }
+    if (playing) {
+      setPlaying(false);
+      return;
+    }
+    if (activeStage === storyStages.length - 1) setActiveStage(0);
+    setPlaying(true);
   };
 
   return (
     <article
-      className="kernel-story"
+      className="seedforge-story"
       id="seedforge-core"
-      aria-labelledby="kernel-title"
+      aria-labelledby="seedforge-title"
+      ref={storyRef}
     >
-      <div className="kernel-intro">
+      <div className="seedforge-intro">
         <div>
-          <p className="kernel-kicker">seedforge / CUDA search microscope</p>
-          <h3 id="kernel-title">
-            One warp. Thirty-two threads. A few active lanes.
+          <p className="seedforge-kicker">seedforge / verified GPU search</p>
+          <h3 id="seedforge-title">
+            From an upstream CUDA engine to a reliable two-GPU research system.
           </h3>
         </div>
-        <p>
-          Each CUDA thread walks a short seed span: ordered prechecks first,
-          then Wang worldgen, path validation, spawn hooks, and an incremental
-          object filter. The expensive middle is sparse and divergent—not
-          limited by peak arithmetic or DRAM bandwidth.
-        </p>
+        <div>
+          <p>
+            A Noita seed deterministically defines a world. Seedforge
+            reconstructs billions of those worlds on GPU, checks 22 target
+            biomes for rare objects, and keeps only canonical, recoverable
+            results.
+          </p>
+          <p>
+            The central work was making the inherited path operational,
+            accurate, complete and crash-safe. Kernel profiling and tuning came
+            after that foundation worked end to end.
+          </p>
+        </div>
       </div>
 
-      <div className="kernel-panel">
-        <div className="kernel-toolbar">
-          <div className="kernel-status">
-            <span className="kernel-status-dot" aria-hidden="true" />
-            <span>{phaseLabels[phase]}</span>
+      <div className="seedforge-panel">
+        <div className="story-toolbar">
+          <div className="story-status">
+            <span className="story-status-dot" aria-hidden="true" />
+            <span>
+              system story · {stage.number} / {storyStages.length.toString().padStart(2, "0")}
+            </span>
           </div>
+          <button className="story-control" onClick={controlStory} type="button">
+            {motion === "reduce"
+              ? "next stage"
+              : playing
+                ? "pause"
+                : activeStage === storyStages.length - 1
+                  ? "replay story"
+                  : "play story"}
+          </button>
+        </div>
 
-          <div className="kernel-actions">
-            <div
-              aria-label="Optimization stage"
-              className="kernel-modes"
-              role="group"
-            >
-              {modes.map((item) => (
-                <button
-                  aria-pressed={item.id === modeId}
-                  className={item.id === modeId ? "is-active" : undefined}
-                  key={item.id}
-                  onClick={() => chooseMode(item.id)}
-                  type="button"
-                >
-                  {item.tab}
-                </button>
+        <ol className="story-steps" aria-label="Seedforge system story">
+          {storyStages.map((item, index) => (
+            <li key={item.id}>
+              <button
+                aria-current={index === activeStage ? "step" : undefined}
+                className={index === activeStage ? "is-active" : undefined}
+                onClick={() => selectStage(index)}
+                type="button"
+              >
+                <span>{item.number}</span>
+                <strong>{item.tab}</strong>
+                <small>{item.result}</small>
+              </button>
+            </li>
+          ))}
+        </ol>
+
+        <div className="story-stage" key={stage.id}>
+          <div className="story-stage-copy">
+            <span>{stage.number} · {stage.tab}</span>
+            <h4>{stage.title}</h4>
+            <p className="story-stage-summary">{stage.summary}</p>
+            <p className="story-stage-detail">{stage.detail}</p>
+            <ul aria-label={`${stage.title} technical anchors`}>
+              {stage.tags.map((tag) => (
+                <li key={tag}>{tag}</li>
               ))}
-            </div>
-            <button
-              className="kernel-replay"
-              disabled={reducedMotion}
-              onClick={replay}
-              type="button"
-            >
-              {reducedMotion ? "motion off" : "replay"}
-            </button>
+            </ul>
+          </div>
+
+          <div className="story-stage-visual">
+            <StageScene stage={stage.id} />
           </div>
         </div>
 
-        <div className="kernel-axis" aria-hidden="true">
-          <span>span × 8</span>
-          <span>precheck</span>
-          <span>{mode.stage}</span>
-          <span>DFS path</span>
-          <span>filter</span>
-        </div>
-
-        <div className="kernel-canvas-host" ref={canvasHostRef}>
-          <canvas
-            aria-label="Schematic CUDA warp trace with 32 lanes; measured values are described below"
-            ref={canvasRef}
-            role="img"
-          />
-        </div>
-
-        <div
-          className={`kernel-gate ${phase === 5 ? "is-passed" : ""}`}
-        >
+        <dl className="seedforge-headlines">
           <div>
-            <span>optimization release gate</span>
-            <strong>CPU == GPU · canonical bytes</strong>
+            <dt>audited world coverage</dt>
+            <dd>22 / 22</dd>
+            <span>target biomes</span>
           </div>
-          <div aria-live="polite" className="kernel-gate-result">
-            <span>seed-block-v2</span>
-            <strong>{phase === 5 ? "PASS" : "WAIT"}</strong>
+          <div>
+            <dt>native workers</dt>
+            <dd>2 GPUs</dd>
+            <span>V100 + RTX 5060 Ti</span>
           </div>
+          <div>
+            <dt>measured capacity*</dt>
+            <dd>135.2k</dd>
+            <span>coalmine seed/s</span>
+          </div>
+          <div>
+            <dt>completed census</dt>
+            <dd>2.147B</dd>
+            <span>world seeds scanned</span>
+          </div>
+        </dl>
+
+        <div className="orchestration-proof">
+          <span>dual-GPU orchestration proof</span>
+          <strong>ROI12 · 433 / 433 accepted cells</strong>
+          <small>0 missing · 0 invalid · resumable ledger</small>
         </div>
 
-        <div className="kernel-readouts">
-          <div aria-live="polite" className="kernel-mode-readout">
-            <span>{mode.title}</span>
-            <strong>{mode.metric}</strong>
-            <small>{mode.metricLabel}</small>
-            <p>{mode.detail}</p>
+        <details className="cuda-profile" open>
+          <summary>
+            <span>
+              <small>technical layer / profiler</small>
+              <strong>Inspect the CUDA worker</strong>
+            </span>
+            <span>
+              V100 · 80 SM · 960 × 64 · 3.08 / 32 lanes
+            </span>
+          </summary>
+
+          <div className="profile-body">
+            <div className="profile-topology">
+              <div className="profile-section-heading">
+                <span>launch hierarchy</span>
+                <strong>P6 diagnostic snapshot</strong>
+              </div>
+
+              <div className="topology-chain">
+                <div>
+                  <span>GPU</span>
+                  <strong>V100</strong>
+                  <small>80 SM</small>
+                </div>
+                <i aria-hidden="true">→</i>
+                <div>
+                  <span>grid</span>
+                  <strong>960 blocks</strong>
+                  <small>2 waves</small>
+                </div>
+                <i aria-hidden="true">→</i>
+                <div>
+                  <span>block</span>
+                  <strong>64 threads</strong>
+                  <small>2 warps</small>
+                </div>
+                <i aria-hidden="true">→</i>
+                <div>
+                  <span>warp</span>
+                  <strong>3.08 / 32</strong>
+                  <small>active lanes</small>
+                </div>
+              </div>
+
+              <div className="sm-grid" aria-hidden="true">
+                {Array.from({ length: 80 }, (_, index) => (
+                  <span key={index} />
+                ))}
+              </div>
+              <div className="sm-caption">
+                <span>80 SM topology · not a per-SM heat map</span>
+                <span>device-wide · MAXRREG 160 · 9.38 active warps / SM</span>
+              </div>
+
+              <div className="final-launch-note">
+                <span>final P7 launch</span>
+                <strong>1440 blocks × 64 · 3 waves · span 8</strong>
+                <small>The counters shown here predate that final kernel.</small>
+              </div>
+            </div>
+
+            <div className="profile-pipelines">
+              <div className="profile-section-heading">
+                <span>pipeline / load</span>
+                <strong>Nsight Compute · coalmine</strong>
+              </div>
+
+              <dl className="profile-bars">
+                {profileMetrics.map((metric) => (
+                  <div key={metric.label}>
+                    <dt>
+                      <span>{metric.label}</span>
+                      <strong>{metric.display}</strong>
+                    </dt>
+                    <dd>
+                      <span style={{ width: `${metric.value}%` }} />
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="stall-metrics">
+                <div>
+                  <span>dependent memory waits</span>
+                  <strong>47.71%</strong>
+                  <small>long_scoreboard sample share</small>
+                </div>
+                <div>
+                  <span>instruction queue pressure</span>
+                  <strong>36.57%</strong>
+                  <small>lg_throttle sample share</small>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <dl className="kernel-measures">
+          <div className="profile-conclusion">
             <div>
-              <dt>active lanes / instruction</dt>
-              <dd>3.08 / 32</dd>
-              <span>P6 NCU · coalmine</span>
+              <span>profiler reading</span>
+              <strong>Sparse, divergent and latency / issue limited.</strong>
             </div>
-            <div>
-              <dt>end-to-end gain</dt>
-              <dd>2.85×</dd>
-              <span>20.9k → 59.5k seed/s</span>
-            </div>
-            <div>
-              <dt>exhaustive census</dt>
-              <dd>2.147B</dd>
-              <span>world seeds</span>
-            </div>
-          </dl>
-        </div>
+            <p>
+              Peak compute and DRAM remain mostly idle while pathfinding takes
+              roughly 84% of the coalmine wall time. Dependent memory work,
+              queue pressure and only 3–4 active lanes leave meaningful
+              headroom for future kernel work.
+            </p>
+          </div>
+        </details>
 
-        <div className="kernel-footnote">
+        <div className="seedforge-notes">
           <p>
-            Representative execution trace; lane masks are schematic. The
-            eight-seed span reflects the final V100 m18/s8 shape; performance
-            figures use the coalmine workload.
+            * 59.5k V100 + 75.7k RTX 5060 Ti, measured independently on the
+            coalmine workload before orchestration overhead.
           </p>
           <p>
             Seedforge extends the{" "}
@@ -587,9 +632,8 @@ export default function SeedforgeKernel() {
             >
               upstream NoitaSeedSearcherCUDA engine
             </a>
-            . A hit returns the unprocessed tail of its thread&apos;s span to
-            the host queue; the gate validates releases, not every runtime
-            seed.
+            . Telescope parity is a sampled independent cross-check; documented
+            residuals are not presented as exhaustive game parity.
           </p>
         </div>
       </div>
