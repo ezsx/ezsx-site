@@ -3,6 +3,7 @@ import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 const outputDirectory = new URL("../out/", import.meta.url);
+const sourceDirectory = new URL("../app/", import.meta.url);
 
 async function readOutput(pathname) {
   return readFile(new URL(pathname, outputDirectory), "utf8");
@@ -59,4 +60,18 @@ test("static export includes GitHub Pages support files", async () => {
   await assert.rejects(access(new URL(".vite/", outputDirectory)));
   await assert.rejects(access(new URL("server/", outputDirectory)));
   await assert.rejects(access(new URL(".openai/", outputDirectory)));
+});
+
+test("project fragment links do not start a long-distance smooth scroll", async () => {
+  const [baseStyles, workOverview] = await Promise.all([
+    readFile(new URL("styles/01-base.css", sourceDirectory), "utf8"),
+    readFile(
+      new URL("components/site/work-overview.tsx", sourceDirectory),
+      "utf8",
+    ),
+  ]);
+
+  assert.match(workOverview, /<a href=\{storyHref\}>/);
+  assert.doesNotMatch(workOverview, /\bonClick\s*=/);
+  assert.doesNotMatch(baseStyles, /scroll-behavior\s*:\s*smooth/i);
 });
