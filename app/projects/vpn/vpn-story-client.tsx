@@ -27,6 +27,7 @@ export default function VpnStoryClient({
       articleClassName="vpn-story"
       articleId="vpn-control-plane"
       bodyId="vpn-system-story"
+      brief={content.brief}
       headlineClassName="vpn-headlines"
       headlines={content.headlines}
       intro={content.intro}

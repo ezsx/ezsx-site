@@ -1,4 +1,5 @@
 import type {
+  StoryBrief,
   StoryHeadline,
   StoryProof,
   StoryStageSequence,
@@ -19,6 +20,7 @@ export type RagContent = Readonly<{
   kicker: string;
   title: string;
   intro: readonly [string, string];
+  brief: StoryBrief;
   navLabel: string;
   stages: StoryStageSequence<typeof ragStageOrder>;
   headlines: readonly StoryHeadline[];
@@ -33,6 +35,25 @@ export const ragContent = {
       "This is not a vector-database wrapper. The system maintains a changing corpus, plans each question, combines lexical and semantic recall, checks whether the evidence is sufficient, and only then writes a cited answer.",
       "The full path is self-hosted across Windows, WSL2 and Docker: Qwen on a V100, embedding and reranking on an RTX 5060 Ti, and FastAPI plus Qdrant on CPU.",
     ],
+    brief: {
+      label: "project brief / 30 second read",
+      summary:
+        "A self-hosted evidence system that answers questions over a changing Telegram corpus with inspectable citations.",
+      points: [
+        {
+          label: "challenge",
+          text: "Retrieval had to recover exact terms and semantic matches without allowing unsupported answers.",
+        },
+        {
+          label: "built",
+          text: "I combined ingestion, ReAct planning, exact and semantic retrieval, reranking, evidence checks, and local inference across Windows, WSL2, and Docker.",
+        },
+        {
+          label: "result",
+          text: "Across 120 reviewed cases, factual quality reached 0.898 on 105 answerable questions, evidence support reached 0.886 on 65 retrieval cases, and all 15 refusal cases were handled correctly.",
+        },
+      ],
+    },
     navLabel: "RAG evidence system story",
     stages: [
       {
@@ -126,6 +147,25 @@ export const ragContent = {
       "Это не обёртка над векторной базой. Система поддерживает меняющийся корпус, планирует каждый вопрос, совмещает лексический и семантический поиск, проверяет достаточность доказательств и лишь затем формирует ответ с источниками.",
       "Весь контур работает локально между Windows, WSL2 и Docker: Qwen на V100, embedding и reranking на RTX 5060 Ti, FastAPI и Qdrant на CPU.",
     ],
+    brief: {
+      label: "кратко о проекте / 30 секунд",
+      summary:
+        "Локальная система, которая отвечает по меняющемуся Telegram-корпусу и показывает проверяемые источники.",
+      points: [
+        {
+          label: "задача",
+          text: "Поиск должен находить точные термины и смысловые совпадения, не позволяя модели отвечать без достаточных доказательств.",
+        },
+        {
+          label: "сделано",
+          text: "Я совместил точный и семантический поиск, повторное ранжирование, проверку достаточности источников и локальные модели в Windows, WSL2 и Docker.",
+        },
+        {
+          label: "результат",
+          text: "На 120 проверенных кейсах фактическая точность составила 0,898 для 105 вопросов с ответом, подтверждённость источниками составила 0,886 для 65 кейсов с найденными доказательствами, а все 15 кейсов без ответа были корректно отклонены.",
+        },
+      ],
+    },
     navLabel: "История RAG-системы доказательств",
     stages: [
       {

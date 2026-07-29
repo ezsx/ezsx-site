@@ -1,4 +1,5 @@
 import type {
+  StoryBrief,
   StoryHeadline,
   StoryProof,
   StoryStageSequence,
@@ -20,6 +21,7 @@ export type RepoSemanticContent = Readonly<{
   kicker: string;
   title: string;
   intro: readonly [string, string];
+  brief: StoryBrief;
   navLabel: string;
   stages: StoryStageSequence<typeof repoSemanticStageOrder>;
   headlines: readonly StoryHeadline[];
@@ -34,6 +36,25 @@ export const repoSemanticContent = {
       "Coding agents are strong once they have the right context. In an unfamiliar repository, the expensive part is locating implementation, tests, docs and configuration without mistaking a plausible match for evidence.",
       "repo-semantic-mcp is not a hidden coding agent. It keeps repository maps fresh, combines meaning with exact terms, adds bounded structural context when useful, and hands the agent file ranges plus explicit verification actions.",
     ],
+    brief: {
+      label: "project brief / 30 second read",
+      summary:
+        "A repository retrieval layer that gives coding agents the right files, line ranges, and verification steps before they edit.",
+      points: [
+        {
+          label: "challenge",
+          text: "In an unfamiliar codebase, plausible semantic matches are not enough. Implementation, tests, docs, and configuration must return as verifiable evidence.",
+        },
+        {
+          label: "built",
+          text: "I built language-aware indexing, exact and semantic retrieval, a bounded relation graph, freshness tracking, and MCP handoff.",
+        },
+        {
+          label: "result",
+          text: "The frozen self-repo baseline reached 83.3% recall @ 10. In 19 / 24 tasks, every expected file appeared within the top 20.",
+        },
+      ],
+    },
     navLabel: "Repository context retrieval story",
     stages: [
       {
@@ -148,6 +169,25 @@ export const repoSemanticContent = {
       "Coding-агент силён, когда получил правильный контекст. В незнакомом репозитории дорого не написать код, а найти реализацию, тесты, документацию и конфигурацию, не приняв правдоподобное совпадение за доказательство.",
       "repo-semantic-mcp - не скрытый coding-агент. Он поддерживает карту репозитория свежей, объединяет смысл и точные термины, при необходимости добавляет ограниченный структурный контекст и возвращает диапазоны файлов вместе с явными действиями для проверки.",
     ],
+    brief: {
+      label: "кратко о проекте / 30 секунд",
+      summary:
+        "Слой поиска по репозиторию, который до первой правки отдаёт coding-агенту нужные файлы, диапазоны строк и шаги проверки.",
+      points: [
+        {
+          label: "задача",
+          text: "В незнакомом коде правдоподобного совпадения недостаточно. Реализация, тесты, документация и конфигурация должны возвращаться как проверяемые доказательства.",
+        },
+        {
+          label: "сделано",
+          text: "Я построил индексацию с учётом языка, совместил точный и семантический поиск, добавил ограниченный граф связей, контроль свежести и выдачу через MCP.",
+        },
+        {
+          label: "результат",
+          text: "В зафиксированном тесте средняя доля ожидаемых файлов в первых 10 результатах составила 83,3%. В 19 из 24 задач все нужные файлы попали в первые 20.",
+        },
+      ],
+    },
     navLabel: "История retrieval-контекста репозитория",
     stages: [
       {

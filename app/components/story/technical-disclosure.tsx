@@ -1,4 +1,7 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { useState } from "react";
 import type { TechnicalDisclosureLabels } from "./story-types";
 
 type TechnicalDisclosureProps = Readonly<{
@@ -16,16 +19,19 @@ export default function TechnicalDisclosure({
   bodyClassName,
   children,
   className = "",
-  defaultOpen = true,
+  defaultOpen = false,
   eyebrow,
   labels,
   meta,
   title,
 }: TechnicalDisclosureProps) {
+  const [open, setOpen] = useState(defaultOpen);
+
   return (
     <details
       className={`technical-disclosure ${className}`.trim()}
-      open={defaultOpen}
+      onToggle={(event) => setOpen(event.currentTarget.open)}
+      open={open}
     >
       <summary>
         <span>

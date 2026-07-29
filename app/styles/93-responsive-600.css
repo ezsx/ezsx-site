@@ -11,6 +11,19 @@
     font-size: 17px;
   }
 
+  .project-story-brief-points {
+    grid-template-columns: 1fr;
+  }
+
+  .project-story-brief-points li {
+    padding: 21px 22px 22px;
+  }
+
+  .project-story-brief-points li + li {
+    border-top: 1px solid var(--line-soft);
+    border-left: 0;
+  }
+
   .story-toolbar {
     align-items: flex-start;
     flex-direction: column;

@@ -30,6 +30,21 @@ export type StoryProof = Readonly<{
   detail: string;
 }>;
 
+export type StoryBriefPoint = Readonly<{
+  label: string;
+  text: string;
+}>;
+
+export type StoryBrief = Readonly<{
+  label: string;
+  summary: string;
+  points: readonly [
+    StoryBriefPoint,
+    StoryBriefPoint,
+    StoryBriefPoint,
+  ];
+}>;
+
 export type StoryLabels = Readonly<{
   systemStory: string;
   expandStory: string;

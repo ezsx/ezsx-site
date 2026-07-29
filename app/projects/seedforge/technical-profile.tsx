@@ -228,22 +228,22 @@ export default function SeedforgeTechnicalProfile({
           </div>
           <p>{text.conclusion}</p>
         </div>
-      </TechnicalDisclosure>
 
-      <div className="story-notes">
-        <p>{text.capacityNote}</p>
-        <p>
-          {text.upstreamPrefix}{" "}
-          <a
-            href="https://github.com/pudy248/NoitaSeedSearcherCUDA"
-            rel="noreferrer"
-            target="_blank"
-          >
-            {text.upstreamLabel}
-          </a>
-          . {text.upstreamSuffix}
-        </p>
-      </div>
+        <div className="story-notes">
+          <p>{text.capacityNote}</p>
+          <p>
+            {text.upstreamPrefix}{" "}
+            <a
+              href="https://github.com/pudy248/NoitaSeedSearcherCUDA"
+              rel="noreferrer"
+              target="_blank"
+            >
+              {text.upstreamLabel}
+            </a>
+            . {text.upstreamSuffix}
+          </p>
+        </div>
+      </TechnicalDisclosure>
     </>
   );
 }

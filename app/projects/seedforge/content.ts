@@ -1,4 +1,5 @@
 import type {
+  StoryBrief,
   StoryHeadline,
   StoryProof,
   StoryStageSequence,
@@ -19,6 +20,7 @@ export type SeedforgeContent = Readonly<{
   kicker: string;
   title: string;
   intro: readonly [string, string];
+  brief: StoryBrief;
   navLabel: string;
   stages: StoryStageSequence<typeof seedforgeStageOrder>;
   headlines: readonly StoryHeadline[];
@@ -33,6 +35,25 @@ export const seedforgeContent = {
       "A Noita seed deterministically defines a world. Seedforge reconstructs billions of those worlds on GPU, checks 22 target biomes for rare objects, and keeps only canonical, recoverable results.",
       "The central work was making the inherited path operational, accurate, complete and crash-safe. Kernel profiling and tuning came after that foundation worked end to end.",
     ],
+    brief: {
+      label: "project brief / 30 second read",
+      summary:
+        "A verified GPU system that exhaustively searches Noita worlds and preserves canonical, recoverable results.",
+      points: [
+        {
+          label: "challenge",
+          text: "The inherited CUDA search path did not run reliably, return correct results, or cover the full world. Performance only mattered after the system worked end to end.",
+        },
+        {
+          label: "built",
+          text: "I restored the native pipeline, proved CPU, V100 and RTX agreement, covered all 22 target biomes, and added crash-safe work distribution across two unequal GPUs.",
+        },
+        {
+          label: "result",
+          text: "The completed census scanned 2.147B world seeds. A separate dual-GPU run accepted all 433 cells with 0 missing and 0 invalid.",
+        },
+      ],
+    },
     navLabel: "Seedforge system story",
     stages: [
       {
@@ -142,6 +163,25 @@ export const seedforgeContent = {
       "Seed в Noita детерминированно задаёт мир. Seedforge реконструирует миллиарды таких миров на GPU, проверяет 22 целевых биома на редкие объекты и сохраняет только канонические, восстанавливаемые результаты.",
       "Главная работа состояла в том, чтобы сделать унаследованный путь рабочим, точным, полным и устойчивым к сбоям. Профилирование и настройка ядра начались уже после того, как вся система заработала целиком.",
     ],
+    brief: {
+      label: "кратко о проекте / 30 секунд",
+      summary:
+        "GPU-система для полного поиска миров Noita с проверяемыми и восстанавливаемыми результатами.",
+      points: [
+        {
+          label: "задача",
+          text: "Унаследованный CUDA-поисковик не запускался надёжно, не давал корректного результата и не покрывал весь мир. Скорость имела смысл только после исправления основы.",
+        },
+        {
+          label: "сделано",
+          text: "Я восстановил CUDA-поисковик, добился совпадения CPU, V100 и RTX, добавил все 22 целевых биома и распределение работы между двумя GPU с восстановлением после сбоев.",
+        },
+        {
+          label: "результат",
+          text: "Полная перепись проверила 2,147 млрд миров. Отдельный запуск на двух GPU полностью обработал 433 из 433 ячеек без пропусков и ошибок.",
+        },
+      ],
+    },
     navLabel: "История системы Seedforge",
     stages: [
       {

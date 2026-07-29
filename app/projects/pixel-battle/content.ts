@@ -1,4 +1,5 @@
 import type {
+  StoryBrief,
   StoryHeadline,
   StoryProof,
   StoryStageSequence,
@@ -20,6 +21,7 @@ export type PixelBattleContent = Readonly<{
   kicker: string;
   title: string;
   intro: readonly [string, string];
+  brief: StoryBrief;
   navLabel: string;
   stages: StoryStageSequence<typeof pixelBattleStageOrder>;
   headlines: readonly StoryHeadline[];
@@ -34,6 +36,25 @@ export const pixelBattleContent = {
       "PixelBattle powered a collaborative canvas for a live event. Participants joined over WebSocket, loaded the same field and changed it one accepted pixel at a time.",
       "I owned the FastAPI backend and its protocol for the Flutter client: PostgreSQL held canonical users and pixels, while an in-process ConnectionManager held live sockets and selections and fanned accepted changes out sequentially.",
     ],
+    brief: {
+      label: "project brief / 30 second read",
+      summary:
+        "A FastAPI and WebSocket backend for a collaborative live canvas where each accepted pixel becomes a consistent update for connected clients.",
+      points: [
+        {
+          label: "challenge",
+          text: "Concurrent participants needed one canonical canvas, per-user action limits, and protection against stale writes.",
+        },
+        {
+          label: "built",
+          text: "I built the backend and Flutter protocol. PostgreSQL holds canonical state, WebSocket distributes accepted changes, and Prometheus exposes runtime signals.",
+        },
+        {
+          label: "result",
+          text: "Load testing reached 1.5-2K simultaneous connections with broadcast latency below 50 ms.",
+        },
+      ],
+    },
     navLabel: "One accepted pixel through the PixelBattle backend",
     stages: [
       {
@@ -147,6 +168,25 @@ export const pixelBattleContent = {
       "PixelBattle обслуживал совместный холст во время live-события. Участники подключались по WebSocket, получали общее поле и меняли его по одному принятому пикселю.",
       "Я отвечал за FastAPI backend и его протокол для Flutter-клиента: PostgreSQL хранил каноническое состояние пользователей и пикселей, а in-process ConnectionManager держал живые соединения и selections и последовательно рассылал принятые изменения.",
     ],
+    brief: {
+      label: "кратко о проекте / 30 секунд",
+      summary:
+        "Backend совместного live-холста на FastAPI и WebSocket, где каждый принятый пиксель становится согласованным обновлением для подключённых клиентов.",
+      points: [
+        {
+          label: "задача",
+          text: "Для одновременной работы участников требовались единое состояние холста, ограничения частоты действий и защита от устаревших записей.",
+        },
+        {
+          label: "сделано",
+          text: "Я разработал backend и протокол Flutter-клиента. PostgreSQL хранит единое состояние, WebSocket рассылает принятые изменения, а Prometheus показывает рабочие метрики.",
+        },
+        {
+          label: "результат",
+          text: "Нагрузочный тест достиг 1,5-2 тыс. одновременных подключений при задержке рассылки ниже 50 мс.",
+        },
+      ],
+    },
     navLabel: "Путь одного принятого пикселя через backend PixelBattle",
     stages: [
       {

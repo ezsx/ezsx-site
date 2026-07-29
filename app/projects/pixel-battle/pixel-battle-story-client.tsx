@@ -30,6 +30,7 @@ export default function PixelBattleStoryClient({
       articleClassName="pixel-battle-story"
       articleId="pixel-battle-realtime"
       bodyId="pixel-battle-system-story"
+      brief={content.brief}
       headlineClassName="pixel-battle-headlines"
       headlines={content.headlines}
       intro={content.intro}

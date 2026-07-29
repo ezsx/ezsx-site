@@ -47,6 +47,14 @@
     font-size: 34px;
   }
 
+  .project-story-brief-copy {
+    padding: 23px 22px 24px;
+  }
+
+  .project-story-brief-summary {
+    font-size: 17px;
+  }
+
   .story-headlines {
     grid-template-columns: 1fr;
   }

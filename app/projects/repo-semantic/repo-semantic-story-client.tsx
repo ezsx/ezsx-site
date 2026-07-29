@@ -30,6 +30,7 @@ export default function RepoSemanticStoryClient({
       articleClassName="repo-semantic-story"
       articleId="repo-semantic-context"
       bodyId="repo-semantic-system-story"
+      brief={content.brief}
       headlineClassName="repo-semantic-headlines"
       headlines={content.headlines}
       intro={content.intro}

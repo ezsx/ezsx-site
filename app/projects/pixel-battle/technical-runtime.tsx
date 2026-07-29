@@ -337,12 +337,12 @@ export default function PixelBattleTechnicalRuntime({
             <p>{text.measurementBoundary}</p>
           </div>
         </section>
-      </TechnicalDisclosure>
 
-      <div className="story-notes pixel-notes">
-        <p>{text.ownershipNote}</p>
-        <p>{text.scaleNote}</p>
-      </div>
+        <div className="story-notes pixel-notes">
+          <p>{text.ownershipNote}</p>
+          <p>{text.scaleNote}</p>
+        </div>
+      </TechnicalDisclosure>
     </>
   );
 }

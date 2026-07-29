@@ -4,6 +4,7 @@ import type { CSSProperties, ReactNode } from "react";
 import type {
   NonEmptyReadonlyArray,
   RenderStoryScene,
+  StoryBrief,
   StoryHeadline,
   StoryLabels,
   StoryProof,
@@ -15,6 +16,7 @@ type ProjectStoryProps<Id extends string> = Readonly<{
   articleClassName: string;
   articleId: string;
   bodyId: string;
+  brief: StoryBrief;
   children: ReactNode;
   headlineClassName?: string;
   headlines: readonly StoryHeadline[];
@@ -37,6 +39,7 @@ export default function ProjectStory<Id extends string>({
   articleClassName,
   articleId,
   bodyId,
+  brief,
   children,
   headlineClassName = "",
   headlines,
@@ -91,6 +94,32 @@ export default function ProjectStory<Id extends string>({
           ))}
         </div>
       </div>
+
+      <section
+        aria-labelledby={`${titleId} ${titleId}-brief`}
+        className="project-story-brief"
+      >
+        <div className="project-story-brief-copy">
+          <p
+            className="project-story-brief-label"
+            id={`${titleId}-brief`}
+          >
+            {brief.label}
+          </p>
+          <p className="project-story-brief-summary">{brief.summary}</p>
+        </div>
+        <ol className="project-story-brief-points">
+          {brief.points.map((point, index) => (
+            <li key={point.label}>
+              <span aria-hidden="true">
+                {(index + 1).toString().padStart(2, "0")}
+              </span>
+              <strong>{point.label}</strong>
+              <p>{point.text}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
 
       <div className="project-story-panel">
         <div className="story-toolbar">

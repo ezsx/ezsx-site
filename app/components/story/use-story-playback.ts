@@ -13,7 +13,7 @@ type StoryPlaybackOptions = Readonly<{
 export function useStoryPlayback({
   stageCount,
   intervalMs,
-  initialExpanded = true,
+  initialExpanded = false,
 }: StoryPlaybackOptions) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [playing, setPlaying] = useState(false);

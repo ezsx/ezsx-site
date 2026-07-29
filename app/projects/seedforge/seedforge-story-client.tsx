@@ -36,6 +36,7 @@ export default function SeedforgeStoryClient({
       articleClassName="seedforge-story"
       articleId="seedforge-core"
       bodyId="seedforge-system-story"
+      brief={content.brief}
       headlines={content.headlines}
       intro={content.intro}
       kicker={content.kicker}

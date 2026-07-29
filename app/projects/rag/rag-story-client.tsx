@@ -27,6 +27,7 @@ export default function RagStoryClient({
       articleClassName="rag-story"
       articleId="rag-evidence-system"
       bodyId="rag-system-story"
+      brief={content.brief}
       headlineClassName="rag-headlines"
       headlines={content.headlines}
       intro={content.intro}

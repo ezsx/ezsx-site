@@ -363,12 +363,12 @@ export default function RagTechnicalRetrieval({
 
           <p>{text.boundaryReason}</p>
         </section>
-      </TechnicalDisclosure>
 
-      <div className="story-notes rag-notes">
-        <p>{text.traceNote}</p>
-        <p>{text.metricNote}</p>
-      </div>
+        <div className="story-notes rag-notes">
+          <p>{text.traceNote}</p>
+          <p>{text.metricNote}</p>
+        </div>
+      </TechnicalDisclosure>
     </>
   );
 }

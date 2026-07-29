@@ -1,4 +1,5 @@
 import type {
+  StoryBrief,
   StoryHeadline,
   StoryProof,
   StoryStageSequence,
@@ -19,6 +20,7 @@ export type VpnContent = Readonly<{
   kicker: string;
   title: string;
   intro: readonly [string, string];
+  brief: StoryBrief;
   navLabel: string;
   stages: StoryStageSequence<typeof vpnStageOrder>;
   headlines: readonly StoryHeadline[];
@@ -33,6 +35,25 @@ export const vpnContent = {
       "The system authenticates a device, finds protocol-ready capacity and returns an AWG or Xray configuration through one asynchronous Connect Flow.",
       "The larger job is keeping the control-plane ledger and the Linux fleet truthful through retries, restarts, refills, cleanup and node lifecycle changes.",
     ],
+    brief: {
+      label: "project brief / 30 second read",
+      summary:
+        "A secure-connectivity control plane that issues AWG or Xray configurations and keeps the Linux node fleet recoverable.",
+      points: [
+        {
+          label: "challenge",
+          text: "Concurrent reconnects, retries, restarts, and node drift had to stay consistent without duplicate allocations or lost work.",
+        },
+        {
+          label: "built",
+          text: "I designed the authenticated Connect Flow, durable PostgreSQL job queue, Redis status cache, transaction-safe allocation, and fleet maintenance workers.",
+        },
+        {
+          label: "result",
+          text: "Repeated requests converge on one durable job, each device keeps one active slot, and interrupted work returns safely to processing.",
+        },
+      ],
+    },
     navLabel: "VPN control-plane system story",
     stages: [
       {
@@ -127,6 +148,25 @@ export const vpnContent = {
       "Система аутентифицирует устройство, находит готовую ёмкость нужного протокола и возвращает конфигурацию AWG или Xray через единый асинхронный Connect Flow.",
       "Более крупная задача - сохранять правдивое состояние реестра control plane и Linux-нод при повторах, перезапусках, пополнении, очистке и изменениях жизненного цикла.",
     ],
+    brief: {
+      label: "кратко о проекте / 30 секунд",
+      summary:
+        "Сервис, который по запросу устройства выдаёт готовую конфигурацию AWG или Xray и следит за состоянием Linux-нод.",
+      points: [
+        {
+          label: "задача",
+          text: "Повторные подключения и сбои не должны создавать дубликаты, терять задачи или выдавать уже занятую ёмкость.",
+        },
+        {
+          label: "сделано",
+          text: "Я спроектировал единый Connect Flow, очередь в PostgreSQL, быстрые статусы в Redis, безопасное выделение слотов и обслуживание парка нод.",
+        },
+        {
+          label: "результат",
+          text: "Повторный запрос приходит к той же задаче, у устройства остаётся один активный слот, а прерванная работа возвращается в обработку.",
+        },
+      ],
+    },
     navLabel: "История control plane VPN",
     stages: [
       {

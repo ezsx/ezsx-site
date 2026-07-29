@@ -467,12 +467,12 @@ export default function RepoSemanticTechnicalContext({
             <p>{text.boundaryDetail}</p>
           </div>
         </section>
-      </TechnicalDisclosure>
 
-      <div className="story-notes repo-semantic-notes">
-        <p>{text.traceNote}</p>
-        <p>{text.metricNote}</p>
-      </div>
+        <div className="story-notes repo-semantic-notes">
+          <p>{text.traceNote}</p>
+          <p>{text.metricNote}</p>
+        </div>
+      </TechnicalDisclosure>
     </>
   );
 }

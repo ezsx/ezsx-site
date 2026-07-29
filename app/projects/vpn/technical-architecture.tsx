@@ -263,22 +263,22 @@ export default function VpnTechnicalArchitecture({
 
           <p className="vpn-decision-caveat">{text.caveat}</p>
         </section>
-      </TechnicalDisclosure>
 
-      <div className="story-notes vpn-notes">
-        <p>
-          {text.connectFlowNote.includes("/config") ? (
-            <>
-              {text.connectFlowNote.split("/config")[0]}
-              <code>/config</code>
-              {text.connectFlowNote.split("/config")[1]}
-            </>
-          ) : (
-            text.connectFlowNote
-          )}
-        </p>
-        <p>{text.representativeNote}</p>
-      </div>
+        <div className="story-notes vpn-notes">
+          <p>
+            {text.connectFlowNote.includes("/config") ? (
+              <>
+                {text.connectFlowNote.split("/config")[0]}
+                <code>/config</code>
+                {text.connectFlowNote.split("/config")[1]}
+              </>
+            ) : (
+              text.connectFlowNote
+            )}
+          </p>
+          <p>{text.representativeNote}</p>
+        </div>
+      </TechnicalDisclosure>
     </>
   );
 }

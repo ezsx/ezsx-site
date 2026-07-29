@@ -8,6 +8,19 @@
     max-width: 760px;
   }
 
+  .project-story-brief {
+    grid-template-columns: 1fr;
+  }
+
+  .project-story-brief-copy {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .project-story-brief-summary {
+    max-width: 760px;
+  }
+
   .story-steps {
     grid-template-columns: repeat(
       var(--story-stage-count),

@@ -88,6 +88,38 @@ function assertSharedPortfolio(html) {
   assert.match(html, /id="rag-evidence-system"/);
   assert.match(html, /id="repo-semantic-context"/);
   assert.match(html, /id="pixel-battle-realtime"/);
+  assert.equal(
+    html.match(/class="project-story-brief"/g)?.length,
+    projectTargets.length,
+  );
+  for (const bodyId of [
+    "seedforge-system-story",
+    "vpn-system-story",
+    "rag-system-story",
+    "repo-semantic-system-story",
+    "pixel-battle-system-story",
+  ]) {
+    assert.match(
+      html,
+      new RegExp(
+        `aria-controls="${bodyId}" aria-expanded="false"`,
+      ),
+    );
+    assert.match(
+      html,
+      new RegExp(
+        `class="system-story-body"[^>]*hidden(?:=""|="hidden")?[^>]*id="${bodyId}"`,
+      ),
+    );
+  }
+  assert.equal(
+    html.match(/<details class="technical-disclosure/g)?.length,
+    projectTargets.length,
+  );
+  assert.doesNotMatch(
+    html,
+    /<details class="technical-disclosure[^"]*" open/,
+  );
   assert.match(html, /Inspect one accepted pixel|Разобрать один принятый пиксель/);
   assert.match(html, /active_websocket_connections/);
   assert.match(html, /ws_messages_sent/);
@@ -148,9 +180,15 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /Secure connectivity/,
         /Selected work/,
         /Run a reliable exhaustive seed search across two GPUs/,
-        /collapse story/,
+        /project brief \/ 30 second read/,
+        /The inherited CUDA search path did not run reliably/,
+        /Repeated requests converge on one durable job/,
+        /Across 120 reviewed cases, factual quality reached 0\.898 on 105 answerable questions/,
+        /frozen self-repo baseline reached 83\.3%/,
+        /Load testing reached 1\.5-2K/,
+        /expand story/,
         /P6 diagnostic snapshot/,
-        /collapse profiler/,
+        /expand profiler/,
         /One warp through the search/,
         /pause trace/,
         /optional precheck/,
@@ -203,9 +241,15 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /Защищённое подключение/,
         /Выбранные проекты/,
         /Запустить надёжный полный поиск seed на двух GPU/,
-        /свернуть историю/,
+        /кратко о проекте \/ 30 секунд/,
+        /Унаследованный CUDA-поисковик не запускался надёжно/,
+        /Повторный запрос приходит к той же задаче/,
+        /На 120 проверенных кейсах фактическая точность составила 0,898 для 105 вопросов с ответом/,
+        /средняя доля ожидаемых файлов в первых 10 результатах составила 83,3%/,
+        /Нагрузочный тест достиг 1,5-2 тыс\./,
+        /развернуть историю/,
         /Посмотреть устройство CUDA-воркера/,
-        /свернуть профилировщик/,
+        /развернуть профилировщик/,
         /Один warp проходит весь поиск/,
         /остановить трассу/,
         /Выдавать защищённые подключения и сохранять парк нод управляемым/,
