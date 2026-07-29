@@ -14,12 +14,13 @@ const metadataCopy = {
     openGraphLocale: "en_US",
   },
   ru: {
-    title: "ezsx - системы и инструменты",
+    title: "ezsx - systems and tools",
     description:
-      "Python-системы: бэкенд, Linux-инфраструктура, защищённые подключения, retrieval и GPU-вычисления.",
+      "Проекты на Python: backend, Linux-инфраструктура, защищённые подключения, retrieval и GPU-вычисления.",
     openGraphDescription:
-      "Бэкенд, платформа, защищённые подключения, retrieval и GPU-вычисления.",
-    imageAlt: "ezsx - бэкенд, платформа, retrieval, вычисления",
+      "Backend-разработка, Linux-инфраструктура, защищённые подключения, retrieval и GPU-вычисления.",
+    imageAlt:
+      "ezsx: проекты в backend-разработке, инфраструктуре, retrieval и GPU-вычислениях",
     openGraphLocale: "ru_RU",
   },
 } as const;

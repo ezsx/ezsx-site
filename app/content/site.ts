@@ -207,39 +207,39 @@ export const siteContent = {
     nav: {
       label: "Основная навигация",
       home: "ezsx, на главную",
-      work: "проекты",
-      systems: "стек",
-      contact: "контакты",
+      work: "work",
+      systems: "systems",
+      contact: "contact",
       github: "github",
     },
     localePickerLabel: "Язык",
     hero: {
-      eyebrow: "системы / инструменты / 2026",
+      eyebrow: "systems / tools / 2026",
       title: "ezsx",
       copy:
-        "Python-системы на пересечении бэкенда, Linux-инфраструктуры, защищённых подключений, retrieval и GPU-вычислений.",
+        "Проекты на Python: backend, Linux-инфраструктура, защищённые подключения, retrieval и GPU-вычисления.",
       focusLabel: "Направления работы",
-      focus: ["бэкенд", "платформа", "сети", "retrieval", "вычисления"],
+      focus: ["backend", "platform", "networking", "retrieval", "compute"],
     },
     work: {
-      title: "Выбранные проекты",
-      countLabel: "системы",
-      repositoryLabel: "репозиторий",
-      technologiesLabel: "технологии",
+      title: "Selected work",
+      countLabel: "systems",
+      repositoryLabel: "repository",
+      technologiesLabel: "technologies",
       items: [
         {
           id: "seedforge",
-          name: "CUDA-поиск seed",
-          type: "публичный репозиторий",
+          name: "CUDA seed search",
+          type: "public repository",
           repositoryHref: "https://github.com/ezsx/NoitaSeedSearcherCUDA",
           description:
-            "Полный поиск seed с GPU-ускорением, проверками корректности, восстанавливаемыми запусками на неоднородных GPU и воспроизводимыми результатами.",
+            "Полный перебор seed на GPU с проверками корректности, возобновляемыми запусками на двух разных GPU и воспроизводимыми результатами.",
           details: ["CUDA", "profiling", "verification", "GPU"],
         },
         {
           id: "vpn",
-          name: "Защищённое подключение",
-          type: "частная система",
+          name: "Secure connectivity",
+          type: "private system",
           description:
             "Серверный control plane для асинхронной выдачи конфигураций и управления жизненным циклом Linux-нод с AmneziaWG и Xray.",
           details: ["Python", "PostgreSQL", "Redis", "Linux"],
@@ -247,28 +247,28 @@ export const siteContent = {
         {
           id: "rag-app",
           name: "rag_app",
-          type: "публичный репозиторий",
+          type: "public repository",
           repositoryHref: "https://github.com/ezsx/rag_app",
           description:
-            "Self-hosted RAG и ReAct с гибридным поиском, цитатами, локальным inference и независимым контуром оценки.",
+            "Self-hosted RAG и ReAct: гибридный retrieval, цитаты, локальный inference и отдельный контур оценки.",
           details: ["Python", "Qdrant", "LLM", "evaluation"],
         },
         {
           id: "repo-semantic-mcp",
           name: "repo-semantic-mcp",
-          type: "публичный репозиторий",
+          type: "public repository",
           repositoryHref: "https://github.com/ezsx/repo-semantic-mcp",
           description:
-            "Поиск по репозиторию для coding agents: dense + sparse retrieval, взвешенный RRF, ограниченное расширение графа и диагностика актуальности индекса.",
+            "Поиск по репозиторию для coding agents: dense + sparse retrieval, взвешенный RRF, ограниченное расширение графа и диагностика свежести индекса.",
           details: ["Python", "Qdrant", "MCP", "retrieval"],
         },
         {
           id: "pixel-battle",
           name: "PixelBattle",
-          type: "публичный репозиторий · 2024",
+          type: "public repository · 2024",
           repositoryHref: "https://github.com/ezsx/PixelBattle",
           description:
-            "Backend совместного холста в реальном времени для live-эвента с широковещательными обновлениями и ограничением частоты действий; нагрузочно протестирован на 1,5-2 тыс. одновременных подключений с задержкой рассылки ниже 50 мс.",
+            "Backend совместного холста в реальном времени для живого мероприятия: широковещательные обновления и rate limiting. На нагрузочном тесте система выдержала 1,5-2 тыс. одновременных подключений при задержке рассылки ниже 50 мс.",
           details: [
             "FastAPI",
             "WebSocket",
@@ -280,19 +280,19 @@ export const siteContent = {
       ],
     },
     systems: {
-      title: "Системы",
-      subtitle: "рабочий стек",
+      title: "Systems",
+      subtitle: "working set",
       items: [
         {
-          name: "бэкенд",
+          name: "backend",
           value: "Python / FastAPI / PostgreSQL / Redis / ClickHouse",
         },
         {
-          name: "платформа",
+          name: "platform",
           value: "Linux / Docker / Compose / Swarm / Ansible / observability",
         },
         {
-          name: "сети",
+          name: "networking",
           value: "AmneziaWG / Xray / routing / firewall / DNS",
         },
         {
@@ -300,14 +300,14 @@ export const siteContent = {
           value: "Qdrant / hybrid search / reranking / evaluation / MCP",
         },
         {
-          name: "вычисления",
+          name: "compute",
           value: "CUDA / profiling / exhaustive search",
         },
       ],
     },
     contact: {
-      eyebrow: "связь",
-      title: "Контакты",
+      eyebrow: "direct contact",
+      title: "Contact",
       copy:
         "Исходный код проектов размещён на GitHub. Связаться со мной можно по email или в Telegram.",
       github: "GitHub",

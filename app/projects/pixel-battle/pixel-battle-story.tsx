@@ -1,4 +1,7 @@
-import type { Locale } from "../../content/locales";
+import {
+  technicalContentLocale,
+  type Locale,
+} from "../../content/locales";
 import { storyLabels } from "../../content/story-labels";
 import { pixelBattleContent } from "./content";
 import PixelBattleStoryClient from "./pixel-battle-story-client";
@@ -10,12 +13,14 @@ export default function PixelBattleStory({
 }: {
   locale: Locale;
 }) {
+  const technicalLocale = technicalContentLocale[locale];
+
   return (
     <PixelBattleStoryClient
       content={pixelBattleContent[locale]}
-      labels={storyLabels[locale]}
-      sceneCopy={pixelBattleSceneCopy[locale]}
-      technicalCopy={pixelBattleTechnicalCopy[locale]}
+      labels={storyLabels[technicalLocale]}
+      sceneCopy={pixelBattleSceneCopy[technicalLocale]}
+      technicalCopy={pixelBattleTechnicalCopy[technicalLocale]}
     />
   );
 }
