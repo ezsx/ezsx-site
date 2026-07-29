@@ -3,6 +3,7 @@ import {
   type SiteContent,
 } from "../../content/site";
 import Arrow from "./arrow";
+import ProjectJumpLink from "./project-jump-link";
 
 export default function WorkOverview({ content }: { content: SiteContent }) {
   const itemCount = content.work.items.length
@@ -32,12 +33,12 @@ export default function WorkOverview({ content }: { content: SiteContent }) {
               <div className="work-name">
                 <h3>
                   {storyHref ? (
-                    <a href={storyHref}>
+                    <ProjectJumpLink href={storyHref}>
                       {item.name}
                       <span aria-hidden="true" className="work-jump-mark">
                         ↓
                       </span>
-                    </a>
+                    </ProjectJumpLink>
                   ) : (
                     item.name
                   )}

@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
+import {
+  getProjectJumpTargetId,
+  isPlainPrimaryClick,
+  performProjectJump,
+} from "../app/components/site/project-jump.ts";
 
 const outputDirectory = new URL("../out/", import.meta.url);
 const sourceDirectory = new URL("../app/", import.meta.url);
@@ -62,16 +67,151 @@ test("static export includes GitHub Pages support files", async () => {
   await assert.rejects(access(new URL(".openai/", outputDirectory)));
 });
 
-test("project fragment links do not start a long-distance smooth scroll", async () => {
-  const [baseStyles, workOverview] = await Promise.all([
-    readFile(new URL("styles/01-base.css", sourceDirectory), "utf8"),
+test("project links scroll once without starting fragment navigation", async () => {
+  const storyHrefs = [
+    "#seedforge-core",
+    "#vpn-control-plane",
+    "#rag-evidence-system",
+    "#repo-semantic-context",
+    "#pixel-battle-realtime",
+  ];
+  const [
+    english,
+    russian,
+    jumpLink,
+    jumpHelper,
+    workOverview,
+  ] = await Promise.all([
+    readOutput("index.html"),
+    readOutput("ru/index.html"),
+    readFile(
+      new URL(
+        "components/site/project-jump-link.tsx",
+        sourceDirectory,
+      ),
+      "utf8",
+    ),
+    readFile(
+      new URL("components/site/project-jump.ts", sourceDirectory),
+      "utf8",
+    ),
     readFile(
       new URL("components/site/work-overview.tsx", sourceDirectory),
       "utf8",
     ),
   ]);
 
-  assert.match(workOverview, /<a href=\{storyHref\}>/);
-  assert.doesNotMatch(workOverview, /\bonClick\s*=/);
-  assert.doesNotMatch(baseStyles, /scroll-behavior\s*:\s*smooth/i);
+  assert.equal(getProjectJumpTargetId("#vpn-control-plane"), "vpn-control-plane");
+  assert.equal(getProjectJumpTargetId("#repo%2Dsemantic"), "repo-semantic");
+  assert.equal(getProjectJumpTargetId("https://example.com/#story"), null);
+
+  assert.equal(
+    isPlainPrimaryClick({
+      altKey: false,
+      button: 0,
+      ctrlKey: false,
+      defaultPrevented: false,
+      metaKey: false,
+      shiftKey: false,
+    }),
+    true,
+  );
+
+  for (const modifiedClick of [
+    { button: 1 },
+    { altKey: true },
+    { ctrlKey: true },
+    { defaultPrevented: true },
+    { metaKey: true },
+    { shiftKey: true },
+  ]) {
+    assert.equal(
+      isPlainPrimaryClick({
+        altKey: false,
+        button: 0,
+        ctrlKey: false,
+        defaultPrevented: false,
+        metaKey: false,
+        shiftKey: false,
+        ...modifiedClick,
+      }),
+      false,
+    );
+  }
+
+  const requestedTargetIds = [];
+  const scrollCalls = [];
+  let preventDefaultCalls = 0;
+  let locationHash = "#unchanged";
+  let locationHashWrites = 0;
+  const historyCalls = [];
+  const fakeLocation = {};
+
+  Object.defineProperty(fakeLocation, "hash", {
+    configurable: true,
+    get: () => locationHash,
+    set: (value) => {
+      locationHash = value;
+      locationHashWrites += 1;
+    },
+  });
+  Object.defineProperty(globalThis, "location", {
+    configurable: true,
+    value: fakeLocation,
+  });
+  Object.defineProperty(globalThis, "history", {
+    configurable: true,
+    value: {
+      pushState: (...args) => historyCalls.push(["pushState", ...args]),
+      replaceState: (...args) => historyCalls.push(["replaceState", ...args]),
+    },
+  });
+
+  let handled;
+
+  try {
+    handled = performProjectJump("#seedforge-core", {
+      findTarget: (id) => {
+        requestedTargetIds.push(id);
+        return {
+          getBoundingClientRect: () => ({ top: 525 }),
+        };
+      },
+      getScrollY: () => 100,
+      preventDefault: () => {
+        preventDefaultCalls += 1;
+      },
+      scrollTo: (options) => {
+        scrollCalls.push(options);
+      },
+    });
+  } finally {
+    delete globalThis.location;
+    delete globalThis.history;
+  }
+
+  assert.equal(handled, true);
+  assert.deepEqual(requestedTargetIds, ["seedforge-core"]);
+  assert.equal(preventDefaultCalls, 1);
+  assert.deepEqual(scrollCalls, [
+    { behavior: "instant", left: 0, top: 577 },
+  ]);
+  assert.equal(locationHash, "#unchanged");
+  assert.equal(locationHashWrites, 0);
+  assert.deepEqual(historyCalls, []);
+
+  await Promise.resolve();
+  assert.equal(scrollCalls.length, 1);
+
+  assert.match(workOverview, /<ProjectJumpLink href=\{storyHref\}>/);
+  assert.match(jumpLink, /<a href=\{href\} onClick=\{handleClick\}>/);
+  assert.doesNotMatch(
+    `${jumpLink}\n${jumpHelper}`,
+    /addEventListener|requestAnimationFrame|setInterval|setTimeout|history\.|location\.hash/,
+  );
+
+  for (const href of storyHrefs) {
+    assert.ok(english.includes(`href="${href}"`));
+    assert.ok(russian.includes(`href="${href}"`));
+  }
 });
