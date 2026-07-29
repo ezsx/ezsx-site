@@ -11,12 +11,13 @@ export const workItemOrder = [
 export type WorkItemId = (typeof workItemOrder)[number];
 
 export const workStoryHrefs: Readonly<
-  Partial<Record<WorkItemId, `#${string}`>>
+  Record<WorkItemId, `#${string}`>
 > = {
   seedforge: "#seedforge-core",
   vpn: "#vpn-control-plane",
   "rag-app": "#rag-evidence-system",
   "repo-semantic-mcp": "#repo-semantic-context",
+  "pixel-battle": "#pixel-battle-realtime",
 };
 
 export type WorkItem<Id extends WorkItemId = WorkItemId> = Readonly<{

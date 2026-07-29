@@ -27,7 +27,11 @@
   .rag-recall-bars i::after,
   .rag-retrieval-pipeline > div.is-colbert > i b,
   .repo-graph-bus b,
-  .repo-graph-node.is-seed > i {
+  .repo-graph-node.is-seed > i,
+  .pixel-flow-link b,
+  .pixel-canvas > i.is-current,
+  .pixel-recipient-grid > div > i,
+  .pixel-metric-panel > div i::after {
     animation: none;
   }
 

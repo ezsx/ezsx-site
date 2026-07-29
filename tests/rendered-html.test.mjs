@@ -48,6 +48,7 @@ function assertSharedPortfolio(html) {
     "#vpn-control-plane",
     "#rag-evidence-system",
     "#repo-semantic-context",
+    "#pixel-battle-realtime",
   ];
 
   assert.match(html, /repo-semantic-mcp/);
@@ -74,19 +75,26 @@ function assertSharedPortfolio(html) {
   assert.ok(
     html.indexOf('href="#repo-semantic-context"') <
       html.indexOf(
-        'href="https://github.com/ezsx/PixelBattle"',
+        'href="#pixel-battle-realtime"',
       ),
   );
   assert.match(html, /aria-controls="seedforge-system-story"/);
   assert.match(html, /aria-controls="vpn-system-story"/);
   assert.match(html, /aria-controls="rag-system-story"/);
   assert.match(html, /aria-controls="repo-semantic-system-story"/);
+  assert.match(html, /aria-controls="pixel-battle-system-story"/);
   assert.match(html, /id="seedforge-core"/);
   assert.match(html, /id="vpn-control-plane"/);
   assert.match(html, /id="rag-evidence-system"/);
   assert.match(html, /id="repo-semantic-context"/);
-  assert.doesNotMatch(html, /id="pixel-battle[^"]*"/);
-  assert.doesNotMatch(html, /aria-controls="pixel-battle/);
+  assert.match(html, /id="pixel-battle-realtime"/);
+  assert.match(html, /Inspect one accepted pixel|Разобрать один принятый пиксель/);
+  assert.match(html, /active_websocket_connections/);
+  assert.match(html, /ws_messages_sent/);
+  assert.match(html, /ws_messages_received/);
+  assert.match(html, /ConnectionManager\.broadcast/);
+  assert.match(html, /1\.5-2K|1,5-2 тыс\./);
+  assert.match(html, /&lt; 50 ms|&lt; 50 мс/);
   assert.match(html, /22 \/ 22/);
   assert.match(html, /135\.2k/);
   assert.match(html, /433 \/ 433/);
@@ -159,6 +167,12 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /retrieval substrate, not a hidden planner/,
         /May 7 dogfood snapshot/,
         /Backend for a real-time collaborative canvas at a live event/,
+        /Turn one accepted pixel into a shared moment/,
+        /Inspect one accepted pixel/,
+        /database write first, WebSocket delta next/,
+        /reported load-test results/,
+        /optional existing user id/,
+        /stale actions stop before cooldown update and broadcast/,
       ],
       absent: [
         /Перейти к содержимому/,
@@ -169,6 +183,8 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /Найти нужные файлы до первой правки/,
         /Посмотреть путь одного repository-context запроса/,
         /Backend совместного холста в реальном времени для live-эвента/,
+        /Превратить принятый пиксель в общее событие/,
+        /Разобрать один принятый пиксель/,
       ],
     },
     {
@@ -205,6 +221,12 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /retrieval substrate, а не скрытый planner/,
         /dogfood snapshot · 7 мая/,
         /Backend совместного холста в реальном времени для live-эвента/,
+        /Превратить принятый пиксель в общее событие/,
+        /Разобрать один принятый пиксель/,
+        /сначала каноническая запись, затем WebSocket-изменение/,
+        /относятся к нагрузочному тесту/,
+        /user id, если он уже есть/,
+        /stale-действия не обновляют cooldown/,
       ],
       absent: [
         /Skip to content/,
@@ -216,6 +238,8 @@ test("server-renders localized English and Russian portfolio routes", async () =
         /Find the files that matter before the first edit/,
         /Inspect one repository-context request/,
         /Backend for a real-time collaborative canvas at a live event/,
+        /Turn one accepted pixel into a shared moment/,
+        /Inspect one accepted pixel/,
       ],
     },
   ];
@@ -328,4 +352,14 @@ test("client bundles do not embed both locale dictionaries", async () => {
     source,
     /Посмотреть путь одного repository-context запроса/,
   );
+  assert.doesNotMatch(
+    source,
+    /Turn one accepted pixel into a shared moment/,
+  );
+  assert.doesNotMatch(
+    source,
+    /Превратить принятый пиксель в общее событие/,
+  );
+  assert.doesNotMatch(source, /Inspect one accepted pixel/);
+  assert.doesNotMatch(source, /Разобрать один принятый пиксель/);
 });

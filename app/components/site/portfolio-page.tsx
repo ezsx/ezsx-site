@@ -1,5 +1,6 @@
 import type { Locale } from "../../content/locales";
 import { siteContent } from "../../content/site";
+import PixelBattleStory from "../../projects/pixel-battle/pixel-battle-story";
 import RagStory from "../../projects/rag/rag-story";
 import RepoSemanticStory from "../../projects/repo-semantic/repo-semantic-story";
 import SeedforgeStory from "../../projects/seedforge/seedforge-story";
@@ -31,6 +32,7 @@ export default function PortfolioPage({ locale }: { locale: Locale }) {
             <VpnStory locale={locale} />
             <RagStory locale={locale} />
             <RepoSemanticStory locale={locale} />
+            <PixelBattleStory locale={locale} />
           </section>
 
           <SystemsSection content={content} />
