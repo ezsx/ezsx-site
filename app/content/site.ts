@@ -198,7 +198,7 @@ export const siteContent = {
       telegram: "Telegram",
     },
     footer: {
-      domain: "ezsx.xx.kg",
+      domain: "ezsx.github.io",
       note: "personal engineering projects",
     },
   },
@@ -315,7 +315,7 @@ export const siteContent = {
       telegram: "Telegram",
     },
     footer: {
-      domain: "ezsx.xx.kg",
+      domain: "ezsx.github.io",
       note: "личные инженерные проекты",
     },
   },

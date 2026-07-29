@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { localeHref, type Locale } from "./locales";
 
-const canonicalUrl = new URL("https://ezsx.xx.kg");
+const canonicalUrl = new URL("https://ezsx.github.io");
 
 const metadataCopy = {
   en: {

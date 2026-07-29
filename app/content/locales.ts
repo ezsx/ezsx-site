@@ -4,5 +4,5 @@ export type Locale = (typeof supportedLocales)[number];
 
 export const localeHref: Record<Locale, string> = {
   en: "/",
-  ru: "/ru",
+  ru: "/ru/",
 };

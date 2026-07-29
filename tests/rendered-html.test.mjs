@@ -16,13 +16,13 @@ async function loadWorker() {
 
 async function render(pathname) {
   const worker = await loadWorker();
-  const url = new URL(pathname, "https://ezsx.xx.kg");
+  const url = new URL(pathname, "https://ezsx.github.io");
 
   const response = await worker.fetch(
     new Request(url, {
       headers: {
         accept: "text/html",
-        host: "ezsx.xx.kg",
+        host: "ezsx.github.io",
       },
     }),
     {
@@ -123,7 +123,7 @@ function assertSharedPortfolio(html) {
     /rg --fixed-strings --line-number start_watcher \./,
   );
   assert.match(html, /scdcor@gmail\.com/);
-  assert.match(html, /https:\/\/ezsx\.xx\.kg\/og\.png/);
+  assert.match(html, /https:\/\/ezsx\.github\.io\/og\.png/);
   assert.doesNotMatch(html, /20\.9k/);
   assert.doesNotMatch(html, /POST \/config/);
   assert.doesNotMatch(html, /[\u2013\u2014]/);
@@ -137,11 +137,11 @@ test("server-renders localized English and Russian portfolio routes", async () =
       lang: "en",
       title: /<title>ezsx - systems and tools<\/title>/i,
       canonical:
-        /rel="canonical" href="https:\/\/ezsx\.xx\.kg\/"/,
+        /rel="canonical" href="https:\/\/ezsx\.github\.io\/"/,
       activeLocale:
         /<a aria-current="page" href="\/" hrefLang="en" lang="en">EN<\/a>/,
       inactiveLocale:
-        /<a href="\/ru" hrefLang="ru" lang="ru">RU<\/a>/,
+        /<a href="\/ru\/" hrefLang="ru" lang="ru">RU<\/a>/,
       ogLocale: "en_US",
       alternateOgLocale: "ru_RU",
       phrases: [
@@ -192,9 +192,9 @@ test("server-renders localized English and Russian portfolio routes", async () =
       lang: "ru",
       title: /<title>ezsx - системы и инструменты<\/title>/i,
       canonical:
-        /rel="canonical" href="https:\/\/ezsx\.xx\.kg\/ru"/,
+        /rel="canonical" href="https:\/\/ezsx\.github\.io\/ru\/"/,
       activeLocale:
-        /<a aria-current="page" href="\/ru" hrefLang="ru" lang="ru">RU<\/a>/,
+        /<a aria-current="page" href="\/ru\/" hrefLang="ru" lang="ru">RU<\/a>/,
       inactiveLocale:
         /<a href="\/" hrefLang="en" lang="en">EN<\/a>/,
       ogLocale: "ru_RU",
@@ -267,20 +267,20 @@ test("server-renders localized English and Russian portfolio routes", async () =
     assert.match(
       html,
       new RegExp(
-        `property="og:url" content="https://ezsx\\.xx\\.kg${route.pathname === "/" ? "/" : "/ru"}"`,
+        `property="og:url" content="https://ezsx\\.github\\.io${route.pathname === "/" ? "/" : "/ru/"}"`,
       ),
     );
     assert.match(
       html,
-      /rel="alternate" hrefLang="en" href="https:\/\/ezsx\.xx\.kg\/"/,
+      /rel="alternate" hrefLang="en" href="https:\/\/ezsx\.github\.io\/"/,
     );
     assert.match(
       html,
-      /rel="alternate" hrefLang="ru" href="https:\/\/ezsx\.xx\.kg\/ru"/,
+      /rel="alternate" hrefLang="ru" href="https:\/\/ezsx\.github\.io\/ru\/"/,
     );
     assert.match(
       html,
-      /rel="alternate" hrefLang="x-default" href="https:\/\/ezsx\.xx\.kg\/"/,
+      /rel="alternate" hrefLang="x-default" href="https:\/\/ezsx\.github\.io\/"/,
     );
     assert.match(html, /class="locale-picker"/);
     assert.match(html, route.activeLocale);

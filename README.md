@@ -16,4 +16,15 @@ Production build:
 npm run build
 ```
 
-The canonical hostname is planned as `ezsx.xx.kg`.
+Static GitHub Pages export:
+
+```bash
+npm run build:static
+```
+
+The static artifact is written to `out/` with English at `/`, Russian at
+`/ru/`, and a standalone `404.html`. The canonical site is
+`https://ezsx.github.io`.
+
+The source remains in `ezsx/ezsx-site`. The `ezsx/ezsx.github.io` repository
+owns the GitHub Pages workflow and publishes the generated artifact.
